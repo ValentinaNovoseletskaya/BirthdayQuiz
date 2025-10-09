@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Театральный квиз - интерактивная викторина о постановках Большого театра">
+  <title>Театральный вечер | Квиз</title>
+  <link rel="icon" href="assets/icons/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Театральный занавес -->
+  <div class="theatre-curtain">
+    <div class="curtain-drape">
+      <div class="curtain-logo"></div>
+      <div class="curtain-text">ТЕАТРАЛЬНЫЙ КВИЗ</div>
+    </div>
+  </div>
+
+  <!-- Боковые занавесы -->
+  <div class="side-curtains" id="sideCurtains">
+    <div class="side-curtain left"></div>
+    <div class="side-curtain right"></div>
+  </div>
+
+  <div class="progress-container" id="progressContainer" style="display: none;">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <span class="progress-text" id="progressText">0/35 фото</span>
+    </div>
+  </div>
+
+  <div id="app">
+    <section id="welcomeScreen" class="screen active">
+      <div class="welcome-content">
+        <h1 class="welcome-title">🎭 Театральный вечер 🎭</h1>
+        <p class="welcome-subtitle">Интерактивный квиз о постановках Большого театра</p>
+        <div class="welcome-instructions">
+          <h3>Правила:</h3>
+          <ul>
+            <li>Ответь на 35 вопросов о легендарных постановках</li>
+            <li>За каждый правильный ответ получи фотографию</li>
+            <li>Используй подсказки, если нужна помощь</li>
+            <li>Собери все фото и открой финальную галерею!</li>
+          </ul>
+        </div>
+        <button class="start-button" onclick="startQuiz()">🎟️ Начать квиз</button>
+      </div>
+    </section>
+
+    <section id="questionScreen" class="screen" style="display: none;">
+      <!-- Венецианская маска слева -->
+      <div class="venetian-mask left-mask"></div>
+      
+      <!-- Венецианская маска справа -->
+      <div class="right-mask"></div>
+      
+      <div class="ticket-container">
+        <div class="ticket-form" role="main" aria-labelledby="questionTitle">
+          <div class="ticket-texture"></div>
+          <div class="ticket-header">
+            <h2 id="questionTitle">ТЕАТРАЛЬНЫЙ ВЕЧЕР</h2>
+            <p class="production-name" id="productionName"></p>
+            <p class="question-number" id="questionNumber"></p>
+          </div>
+          <div class="question-content" id="questionContent"></div>
+          <div class="answers-container" id="answersContainer" role="radiogroup" aria-labelledby="questionTitle"></div>
+          <div class="hints-panel" id="hintsPanel" role="toolbar" aria-label="Подсказки">
+            <button class="hint-button level-1" id="hint1" onclick="showHint(1)">
+              <span class="hint-icon"></span>
+              <span class="hint-timer" id="timer1"></span>
+            </button>
+            <button class="hint-button level-2 locked" id="hint2" disabled onclick="showHint(2)">
+              <span class="hint-icon"></span>
+              <span class="hint-timer" id="timer2"></span>
+            </button>
+            <button class="hint-button level-3 locked" id="hint3" disabled onclick="showHint(3)">
+              <span class="hint-icon"></span>
+              <span class="hint-timer" id="timer3"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Галереи по бокам -->
+      <div class="side-gallery left" id="sideGalleryLeft"></div>
+      <div class="side-gallery right" id="sideGalleryRight"></div>
+    </section>
+
+    <section id="galleryScreen" class="screen final-gallery" style="display: none;">
+      <div class="gallery-header">
+        <h1 class="gallery-title">🎊 Поздравляем! 🎊</h1>
+        <p class="gallery-subtitle">Все 35 фотографий собраны!</p>
+      </div>
+      <div class="view-mode-toggle">
+        <button class="mode-button active" id="collageMode" onclick="switchViewMode('collage')">🖼️ Коллаж</button>
+        <button class="mode-button" id="sliderMode" onclick="switchViewMode('slider')">📸 Слайдер</button>
+      </div>
+      <div id="collageView" class="gallery-collage"></div>
+      <div id="sliderView" class="gallery-slider" style="display: none;">
+        <div class="slider-photo-container">
+          <img id="sliderPhoto" class="slider-photo" src="" alt="Фото">
+          <button class="slider-nav prev" onclick="prevPhoto()">◀</button>
+          <button class="slider-nav next" onclick="nextPhoto()">▶</button>
+        </div>
+        <div class="slider-counter" id="sliderCounter">1 / 35</div>
+      </div>
+      <button class="download-button" onclick="downloadAllPhotos()">Скачать все фото</button>
+      <div class="statistics-panel">
+        <h2 class="statistics-title">🏆 Твои достижения</h2>
+        <div class="stat-item"><span class="stat-label">⏱️ Время прохождения:</span><span class="stat-value" id="statTime">--</span></div>
+        <div class="stat-item"><span class="stat-label">✅ Правильных с 1 попытки:</span><span class="stat-value" id="statCorrect">--/35</span></div>
+        <div class="stat-item"><span class="stat-label">💡 Использовано подсказок:</span><span class="stat-value" id="statHints">--</span></div>
+        <div class="stat-item"><span class="stat-label">🎭 Любимая постановка:</span><span class="stat-value" id="statFavorite">--</span></div>
+      </div>
+      <button class="start-button" onclick="restartQuiz()" style="margin: 40px auto; display: block;">🔄 Начать заново</button>
+    </section>
+  </div>
+
+  <div class="hint-modal" id="hintModal">
+    <div class="hint-content">
+      <button class="hint-close" onclick="closeHint()">✕</button>
+      <h3 class="hint-title" id="hintTitle">💡 Подсказка</h3>
+      <p class="hint-text" id="hintText"></p>
+    </div>
+  </div>
+
+  <div class="photo-reveal-overlay" id="photoRevealOverlay" style="display: none;">
+    <div class="photo-spotlight"></div>
+    <div class="photo-reveal-content">
+      <img id="revealedPhoto" class="revealed-photo" src="" alt="Открытое фото">
+      <p class="photo-reveal-message">✨ Фотография открыта! ✨</p>
+      <p class="photo-number" id="photoNumberText"></p>
+      <button class="continue-button" onclick="continueQuiz()">Продолжить →</button>
+    </div>
+  </div>
+
+  <div class="curtain-animation" id="curtainAnimation" style="display: none;">
+    <div class="curtain-left"></div>
+    <div class="curtain-right"></div>
+  </div>
+
+  <!-- Театральное уведомление -->
+  <div class="theatre-notification" id="theatreNotification" style="display: none;">
+    <div class="notification-content">
+      <div class="notification-icon" id="notificationIcon"></div>
+      <h3 class="notification-title" id="notificationTitle"></h3>
+      <p class="notification-message" id="notificationMessage"></p>
+      <button class="notification-button" id="notificationButton" onclick="closeNotification()">Понятно</button>
+    </div>
+  </div>
+
+  <!-- Театральное подтверждение -->
+  <div class="theatre-confirm" id="theatreConfirm" style="display: none;">
+      <div class="confirm-content">
+      <div class="confirm-icon"></div>
+      <h3 class="confirm-title" id="confirmTitle"></h3>
+      <p class="confirm-message" id="confirmMessage"></p>
+      <div class="confirm-buttons">
+        <button class="confirm-button yes" id="confirmYes">Да</button>
+        <button class="confirm-button no" id="confirmNo">Нет</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="libs/jszip.min.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+
