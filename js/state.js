@@ -3,6 +3,7 @@ const AppState = {
   collectedPhotos: [],
   totalQuestions: 35,
   answers: {},
+  productionProgress: {}, // Отслеживание прогресса по каждому произведению
   statistics: {
     startTime: null,
     endTime: null,
@@ -21,6 +22,7 @@ const AppState = {
       currentQuestionIndex: this.currentQuestionIndex,
       collectedPhotos: this.collectedPhotos,
       answers: this.answers,
+      productionProgress: this.productionProgress,
       statistics: this.statistics
     }));
   },
@@ -33,6 +35,7 @@ const AppState = {
       this.currentQuestionIndex = data.currentQuestionIndex || 0;
       this.collectedPhotos = data.collectedPhotos || [];
       this.answers = data.answers || {};
+      this.productionProgress = data.productionProgress || {};
       this.statistics = data.statistics || this.statistics;
     } catch (e) {
       console.error('Ошибка загрузки состояния:', e);
@@ -44,6 +47,7 @@ const AppState = {
     this.currentQuestionIndex = 0;
     this.collectedPhotos = [];
     this.answers = {};
+    this.productionProgress = {};
     this.statistics = {
       startTime: Date.now(),
       endTime: null,
@@ -51,6 +55,8 @@ const AppState = {
       totalHintsUsed: 0,
       productionStats: {}
     };
+    // Очистить визуальное закрашивание названий произведений
+    this.clearProductionProgressVisuals();
   },
 
   recordAnswer(questionId, isCorrect, attempts, hintsUsed) {
@@ -58,11 +64,13 @@ const AppState = {
     if (isCorrect && attempts === 1) this.statistics.correctFirstTry++;
     this.statistics.totalHintsUsed += hintsUsed.length;
 
-    const question = QUESTIONS_DATA[questionId - 1];
-    const production = question.production;
-    if (!this.statistics.productionStats[production]) this.statistics.productionStats[production] = { total: 0, correct: 0 };
-    this.statistics.productionStats[production].total++;
-    if (isCorrect) this.statistics.productionStats[production].correct++;
+    const question = QUESTIONS_DATA.find(q => q.id === questionId);
+    if (question) {
+      const production = question.production;
+      if (!this.statistics.productionStats[production]) this.statistics.productionStats[production] = { total: 0, correct: 0 };
+      this.statistics.productionStats[production].total++;
+      if (isCorrect) this.statistics.productionStats[production].correct++;
+    }
     this.save();
   },
 
@@ -94,6 +102,37 @@ const AppState = {
     const minutes = Math.floor(elapsed / 60000);
     const seconds = Math.floor((elapsed % 60000) / 1000);
     return `${minutes} мин ${seconds} сек`;
+  },
+
+  updateProductionProgress(production) {
+    if (!this.productionProgress[production]) {
+      this.productionProgress[production] = 0;
+    }
+    this.productionProgress[production]++;
+    
+    // Обновляем визуальное отображение на занавесе
+    const titleEl = document.querySelector(`.production-title[data-production="${production}"]`);
+    if (titleEl) {
+      const progress = this.productionProgress[production];
+      titleEl.className = 'production-title progress-' + progress;
+    }
+    
+    this.save();
+  },
+
+  restoreProductionProgress() {
+    // Восстанавливаем визуальный прогресс произведений после загрузки страницы
+    for (const [production, progress] of Object.entries(this.productionProgress)) {
+      const titleEl = document.querySelector(`.production-title[data-production="${production}"]`);
+      if (titleEl && progress > 0) {
+        titleEl.className = 'production-title progress-' + progress;
+      }
+    }
+  },
+
+  clearProductionProgressVisuals() {
+    const titles = document.querySelectorAll('.production-title');
+    titles.forEach(t => t.className = 'production-title');
   }
 };
 

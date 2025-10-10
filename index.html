@@ -24,8 +24,21 @@
 
   <!-- Боковые занавесы -->
   <div class="side-curtains" id="sideCurtains">
-    <div class="side-curtain left"></div>
-    <div class="side-curtain right"></div>
+    <div class="side-curtain left">
+      <div class="production-title" data-production="Щелкунчик">ЩЕЛКУНЧИК</div>
+      <div class="production-title" data-production="Жизель">ЖИЗЕЛЬ</div>
+      <div class="production-title" data-production="Золушка">ЗОЛУШКА</div>
+      <div class="production-title" data-production="Дон Кихот">ДОН КИХОТ</div>
+      <div class="production-title" data-production="Раймонда">РАЙМОНДА</div>
+      <div class="production-title" data-production="Гамлет">ГАМЛЕТ</div>
+    </div>
+    <div class="side-curtain right">
+      <div class="production-title" data-production="Макбет">МАКБЕТ</div>
+      <div class="production-title" data-production="Эсмеральда">ЭСМЕРАЛЬДА</div>
+      <div class="production-title" data-production="Орлеанская дева">ОРЛЕАНСКАЯ ДЕВА</div>
+      <div class="production-title" data-production="Альцина">АЛЬЦИНА</div>
+      <div class="production-title" data-production="Сотворение мира">СОТВОРЕНИЕ МИРА</div>
+    </div>
   </div>
 
   <div class="progress-container" id="progressContainer" style="display: none;">
@@ -65,7 +78,6 @@
           <div class="ticket-texture"></div>
           <div class="ticket-header">
             <h2 id="questionTitle">ТЕАТРАЛЬНЫЙ ВЕЧЕР</h2>
-            <p class="production-name" id="productionName"></p>
             <p class="question-number" id="questionNumber"></p>
           </div>
           <div class="question-content" id="questionContent"></div>
@@ -110,16 +122,26 @@
         <div class="slider-counter" id="sliderCounter">1 / 35</div>
       </div>
       <button class="download-button" onclick="downloadAllPhotos()">Скачать все фото</button>
-      <div class="statistics-panel">
+      <div class="statistics-panel" id="statisticsPanel">
         <h2 class="statistics-title">🏆 Твои достижения</h2>
         <div class="stat-item"><span class="stat-label">⏱️ Время прохождения:</span><span class="stat-value" id="statTime">--</span></div>
         <div class="stat-item"><span class="stat-label">✅ Правильных с 1 попытки:</span><span class="stat-value" id="statCorrect">--/35</span></div>
         <div class="stat-item"><span class="stat-label">💡 Использовано подсказок:</span><span class="stat-value" id="statHints">--</span></div>
         <div class="stat-item"><span class="stat-label">🎭 Любимая постановка:</span><span class="stat-value" id="statFavorite">--</span></div>
+        <button class="prize-button" id="prizeButton">Приз</button>
       </div>
-      <button class="start-button" onclick="restartQuiz()" style="margin: 40px auto; display: block;">🔄 Начать заново</button>
+      <button class="start-button" onclick="startQuiz()" style="margin: 40px auto; display: block;">🔄 Начать заново</button>
     </section>
   </div>
+
+  <!-- Фейерверк при завершении -->
+  <div class="fireworks hidden" id="fireworks">
+    <div class="fire-burst left"></div>
+    <div class="fire-burst center"></div>
+    <div class="fire-burst right"></div>
+  </div>
+
+  
 
   <div class="hint-modal" id="hintModal">
     <div class="hint-content">

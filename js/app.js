@@ -7,12 +7,17 @@ let currentSlideIndex = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   AppState.init();
+  AppState.restoreProductionProgress(); // Восстанавливаем прогресс на занавесах
   if (AppState.currentQuestionIndex > 0) {
     showConfirm(
       'Продолжить квиз?',
       'Обнаружен сохранённый прогресс. Хотите продолжить с того места, где остановились?',
       () => continueFromSaved(),
-      () => {} // При отказе просто остаёмся на главном экране
+      () => { // Отказ: сбрасываем прогресс, чистим закрашивание
+        AppState.reset();
+        AppState.clearProductionProgressVisuals();
+        clearSideGalleryPhotos(); // Очищаем боковые галереи
+      }
     );
   }
 });
@@ -20,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function startQuiz() {
   AppState.reset();
   AppState.init();
+  AppState.clearProductionProgressVisuals();
+  clearSideGalleryPhotos(); // Очищаем боковые галереи при начале нового квиза
   UI.showScreen('questionScreen');
   loadQuestion(0);
   UI.animateCurtain(true);
@@ -30,12 +37,13 @@ function continueFromSaved() {
     showFinalGallery();
   } else {
     UI.showScreen('questionScreen');
+    restoreSideGalleryPhotos();
     loadQuestion(AppState.currentQuestionIndex);
   }
 }
 
 function loadQuestion(index) {
-  if (index >= QUESTIONS_DATA.length) { completeQuiz(); return; }
+  if (index >= SHUFFLED_QUESTIONS.length) { completeQuiz(); return; }
   AppState.currentQuestionIndex = index;
   currentAttempts = 0;
   usedHints = [];
@@ -48,7 +56,7 @@ function loadQuestion(index) {
 }
 
 function startHintTimers() {
-  const q = QUESTIONS_DATA[AppState.currentQuestionIndex];
+  const q = SHUFFLED_QUESTIONS[AppState.currentQuestionIndex];
   q.hints.forEach((hint, i) => {
     const level = i + 1;
     if (hint.delay > 0) {
@@ -81,7 +89,7 @@ function showHint(level) {
 function closeHint() { UI.closeHintModal(); }
 
 function checkAnswer(selectedIndex) {
-  const q = QUESTIONS_DATA[AppState.currentQuestionIndex];
+  const q = SHUFFLED_QUESTIONS[AppState.currentQuestionIndex];
   const isCorrect = selectedIndex === q.correctIndex;
   currentAttempts++;
   UI.highlightAnswer(selectedIndex, isCorrect);
@@ -89,6 +97,7 @@ function checkAnswer(selectedIndex) {
     playSound('applause');
     AppState.recordAnswer(q.id, true, currentAttempts, usedHints);
     AppState.addPhoto(q.photoPath);
+    AppState.updateProductionProgress(q.production); // Обновляем прогресс произведения
     
     // Раздвигаем занавесы и показываем вылет фото
     setTimeout(() => {
@@ -151,7 +160,30 @@ function continueQuiz() {
   else loadQuestion(nextIndex);
 }
 
-function completeQuiz() { AppState.complete(); showFinalGallery(); }
+function completeQuiz() {
+  AppState.complete();
+  // Показ фейерверка и достижений
+  const fw = document.getElementById('fireworks');
+  const statsPanel = document.getElementById('statisticsPanel');
+  if (fw) fw.classList.remove('hidden');
+  // Скрыть форму квиза
+  const questionScreen = document.getElementById('questionScreen');
+  if (questionScreen) questionScreen.style.display = 'none';
+  // Показать панель достижений
+  if (statsPanel) statsPanel.scrollIntoView({ behavior: 'smooth' });
+  // Кнопка приз: свернуть достижения и показать слайдер с автопрокруткой
+  const prizeBtn = document.getElementById('prizeButton');
+  if (prizeBtn) {
+    prizeBtn.onclick = () => {
+      showFinalGallery();
+      switchViewMode('slider');
+      startAutoSlider();
+    };
+  } else {
+    // Фолбэк если нет кнопки по какой-то причине
+    showFinalGallery();
+  }
+}
 
 function showFinalGallery() { UI.showScreen('galleryScreen'); UI.renderFinalGallery(); UI.animateCurtain(true); }
 
@@ -183,6 +215,13 @@ function showSlide(index) {
 }
 function prevPhoto() { showSlide(currentSlideIndex - 1); }
 function nextPhoto() { showSlide(currentSlideIndex + 1); }
+
+let autoSliderTimer = null;
+function startAutoSlider() {
+  clearInterval(autoSliderTimer);
+  autoSliderTimer = setInterval(() => nextPhoto(), 3000);
+}
+function stopAutoSlider() { clearInterval(autoSliderTimer); }
 
 function toggleGalleryPreview() {
   const preview = document.getElementById('galleryPreview');
@@ -283,6 +322,8 @@ function initSideGalleries() {
 // Инициализируем галереи при загрузке
 window.addEventListener('DOMContentLoaded', () => {
   initSideGalleries();
+  // Если есть сохраненные фото, восстановим их в слоты
+  restoreSideGalleryPhotos();
 });
 
 document.addEventListener('keydown', (e) => {
@@ -300,5 +341,47 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+
+// ============= ВОССТАНОВЛЕНИЕ ФОТО В БОКОВЫХ ГАЛЕРЕЯХ =============
+function restoreSideGalleryPhotos() {
+  const leftGallery = document.getElementById('sideGalleryLeft');
+  const rightGallery = document.getElementById('sideGalleryRight');
+  if (!leftGallery || !rightGallery) return;
+  const leftSlots = leftGallery.querySelectorAll('.side-photo-slot');
+  const rightSlots = rightGallery.querySelectorAll('.side-photo-slot');
+  let li = 0, ri = 0;
+  AppState.collectedPhotos.forEach((photoPath, index) => {
+    const isLeft = index % 2 === 0;
+    if (isLeft && leftSlots[li]) {
+      const slot = leftSlots[li++];
+      slot.style.backgroundImage = `url('${photoPath}')`;
+      slot.classList.add('filled');
+    } else if (!isLeft && rightSlots[ri]) {
+      const slot = rightSlots[ri++];
+      slot.style.backgroundImage = `url('${photoPath}')`;
+      slot.classList.add('filled');
+    }
+  });
+}
+
+// ============= ОЧИСТКА ФОТО В БОКОВЫХ ГАЛЕРЕЯХ =============
+function clearSideGalleryPhotos() {
+  const leftGallery = document.getElementById('sideGalleryLeft');
+  const rightGallery = document.getElementById('sideGalleryRight');
+  if (!leftGallery || !rightGallery) return;
+  
+  // Очищаем все слоты в обеих галереях
+  const allSlots = leftGallery.querySelectorAll('.side-photo-slot');
+  allSlots.forEach(slot => {
+    slot.style.backgroundImage = '';
+    slot.classList.remove('filled');
+  });
+  
+  const allRightSlots = rightGallery.querySelectorAll('.side-photo-slot');
+  allRightSlots.forEach(slot => {
+    slot.style.backgroundImage = '';
+    slot.classList.remove('filled');
+  });
+}
 
 

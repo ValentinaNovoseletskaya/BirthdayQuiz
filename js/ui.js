@@ -6,8 +6,8 @@ const UI = {
   },
 
   renderQuestion(questionIndex) {
-    const q = QUESTIONS_DATA[questionIndex];
-    document.getElementById('productionName').textContent = q.production;
+    const q = SHUFFLED_QUESTIONS[questionIndex];
+    // production name removed from header by design
     document.getElementById('questionNumber').textContent = `Вопрос ${questionIndex + 1} / ${AppState.totalQuestions}`;
 
     const questionContent = document.getElementById('questionContent');
@@ -55,10 +55,12 @@ const UI = {
   },
 
   showHintModal(level) {
-    const q = QUESTIONS_DATA[AppState.currentQuestionIndex];
+    const q = SHUFFLED_QUESTIONS[AppState.currentQuestionIndex];
     const hint = q.hints[level - 1];
     document.getElementById('hintTitle').textContent = `💡 Подсказка уровень ${level}`;
-    document.getElementById('hintText').textContent = hint.text;
+    // Разрешаем простой HTML для вывода иконок/изображений в подсказке
+    const hintEl = document.getElementById('hintText');
+    hintEl.innerHTML = hint.text;
     document.getElementById('hintModal').classList.add('active');
   },
   closeHintModal() { document.getElementById('hintModal').classList.remove('active'); },
