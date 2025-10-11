@@ -8,22 +8,39 @@ let currentSlideIndex = 0;
 document.addEventListener('DOMContentLoaded', () => {
   AppState.init();
   AppState.restoreProductionProgress(); // Восстанавливаем прогресс на занавесах
+  initMobileGallery(); // Инициализируем мобильную галерею
+  
+  // Проверяем целостность сохраненного состояния
   if (AppState.currentQuestionIndex > 0) {
-    showConfirm(
-      'Продолжить квиз?',
-      'Обнаружен сохранённый прогресс. Хотите продолжить с того места, где остановились?',
-      () => continueFromSaved(),
-      () => { // Отказ: сбрасываем прогресс, чистим закрашивание
-        AppState.reset();
-        AppState.clearProductionProgressVisuals();
-        clearSideGalleryPhotos(); // Очищаем боковые галереи
-      }
-    );
+    const savedOrder = localStorage.getItem('quizOrder');
+    if (!savedOrder) {
+      console.warn('Обнаружен прогресс, но нет сохраненного порядка вопросов. Сбрасываем прогресс.');
+      AppState.reset();
+      resetQuestionOrder();
+    } else if (AppState.currentQuestionIndex >= SHUFFLED_QUESTIONS.length) {
+      console.warn('Обнаружен прогресс за пределами количества вопросов. Сбрасываем прогресс.');
+      AppState.reset();
+      resetQuestionOrder();
+    } else {
+      showConfirm(
+        'Продолжить квиз?',
+        'Обнаружен сохранённый прогресс. Хотите продолжить с того места, где остановились?',
+        () => continueFromSaved(),
+        () => { // Отказ: сбрасываем прогресс, чистим закрашивание
+          AppState.reset();
+          resetQuestionOrder(); // Сбрасываем порядок вопросов
+          AppState.clearProductionProgressVisuals();
+          clearSideGalleryPhotos(); // Очищаем боковые галереи
+          clearMobileGallery(); // Очищаем мобильную галерею
+        }
+      );
+    }
   }
 });
 
 function startQuiz() {
   AppState.reset();
+  resetQuestionOrder(); // Сбрасываем порядок вопросов для нового квиза
   AppState.init();
   AppState.clearProductionProgressVisuals();
   clearSideGalleryPhotos(); // Очищаем боковые галереи при начале нового квиза
@@ -45,7 +62,11 @@ function continueFromSaved() {
 
 function loadQuestion(index) {
   if (index >= SHUFFLED_QUESTIONS.length) { completeQuiz(); return; }
+  
+  // Обновляем состояние и сразу сохраняем
   AppState.currentQuestionIndex = index;
+  AppState.save(); // Синхронно сохраняем новое состояние
+  
   currentAttempts = 0;
   usedHints = [];
   Object.values(hintTimers).forEach(t => clearTimeout(t));
@@ -101,15 +122,23 @@ function checkAnswer(selectedIndex) {
     addPhotoToMobileGallery(q.photoPath); // Добавляем в мобильную галерею
     AppState.updateProductionProgress(q.production); // Обновляем прогресс произведения
     
+    // Заранее обновляем индекс следующего вопроса и сохраняем состояние
+    const nextIndex = AppState.currentQuestionIndex + 1;
+    if (nextIndex >= AppState.totalQuestions) {
+      AppState.complete(); // Сохраняем завершение квиза
+    } else {
+      AppState.currentQuestionIndex = nextIndex;
+      AppState.save(); // Синхронно сохраняем переход к следующему вопросу
+    }
+    
     // Раздвигаем занавесы и показываем вылет фото
     setTimeout(() => {
       openCurtains();
       setTimeout(() => {
-        showFlyingPhoto(q.photoPath, AppState.currentQuestionIndex);
+        showFlyingPhoto(q.photoPath, AppState.currentQuestionIndex - 1); // Используем предыдущий индекс для анимации
         
         // Загружаем следующий вопрос во время полета фото
         setTimeout(() => {
-          const nextIndex = AppState.currentQuestionIndex + 1;
           if (nextIndex >= AppState.totalQuestions) {
             completeQuiz();
           } else {
@@ -150,6 +179,15 @@ function checkAnswer(selectedIndex) {
             addPhotoToMobileGallery(q.photoPath); // Добавляем в мобильную галерею
             UI.updateProgress(); // Обновляем прогресс-бар
             
+            // Заранее обновляем индекс следующего вопроса и сохраняем состояние
+            const nextIndex = AppState.currentQuestionIndex + 1;
+            if (nextIndex >= AppState.totalQuestions) {
+              AppState.complete(); // Сохраняем завершение квиза
+            } else {
+              AppState.currentQuestionIndex = nextIndex;
+              AppState.save(); // Синхронно сохраняем переход к следующему вопросу
+            }
+            
             // Показываем стандартную анимацию полета фото
             setTimeout(() => {
               openCurtains();
@@ -158,7 +196,11 @@ function checkAnswer(selectedIndex) {
                 setTimeout(() => {
                   closeCurtains();
                   setTimeout(() => {
-                    loadQuestion(AppState.currentQuestionIndex + 1);
+                    if (nextIndex >= AppState.totalQuestions) {
+                      completeQuiz();
+                    } else {
+                      loadQuestion(nextIndex);
+                    }
                   }, 500);
                 }, 1500);
               }, 500);

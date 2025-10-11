@@ -523,7 +523,50 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-const SHUFFLED_QUESTIONS = shuffleArray(QUESTIONS_DATA);
+/**
+ * Получить перетасованные вопросы с сохранением порядка
+ * Порядок сохраняется в localStorage для стабильности между сессиями
+ */
+function getShuffledQuestions() {
+  const savedOrder = localStorage.getItem('quizOrder');
+  
+  if (savedOrder) {
+    try {
+      const questionIds = JSON.parse(savedOrder);
+      // Восстанавливаем порядок вопросов по сохраненным ID
+      const questions = questionIds.map(id => 
+        QUESTIONS_DATA.find(q => q.id === id)
+      ).filter(q => q !== undefined); // Убираем undefined если ID не найден
+      
+      if (questions.length === QUESTIONS_DATA.length) {
+        return questions;
+      } else {
+        console.warn('Не все вопросы найдены в сохраненном порядке, создаем новый');
+        localStorage.removeItem('quizOrder');
+      }
+    } catch (e) {
+      console.error('Ошибка загрузки порядка вопросов:', e);
+      localStorage.removeItem('quizOrder');
+    }
+  }
+  
+  // Создаем новый порядок если нет сохраненного или он поврежден
+  const shuffled = shuffleArray(QUESTIONS_DATA);
+  localStorage.setItem('quizOrder', JSON.stringify(shuffled.map(q => q.id)));
+  console.log('Создан новый порядок вопросов');
+  
+  return shuffled;
+}
+
+/**
+ * Сбросить порядок вопросов (для нового квиза)
+ */
+function resetQuestionOrder() {
+  localStorage.removeItem('quizOrder');
+  console.log('Порядок вопросов сброшен');
+}
+
+const SHUFFLED_QUESTIONS = getShuffledQuestions();
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = SHUFFLED_QUESTIONS;
