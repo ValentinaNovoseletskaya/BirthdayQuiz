@@ -149,7 +149,20 @@ function checkAnswer(selectedIndex) {
             AppState.addPhoto(q.photoPath);
             addPhotoToMobileGallery(q.photoPath); // Добавляем в мобильную галерею
             UI.updateProgress(); // Обновляем прогресс-бар
-            UI.showPhotoReveal(q.photoPath, AppState.currentQuestionIndex + 1);
+            
+            // Показываем стандартную анимацию полета фото
+            setTimeout(() => {
+              openCurtains();
+              setTimeout(() => {
+                showFlyingPhoto(q.photoPath);
+                setTimeout(() => {
+                  closeCurtains();
+                  setTimeout(() => {
+                    loadQuestion(AppState.currentQuestionIndex + 1);
+                  }, 500);
+                }, 1500);
+              }, 500);
+            }, 500);
           }
         );
       }, 1000);
