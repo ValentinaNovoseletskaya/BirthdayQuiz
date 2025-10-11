@@ -370,12 +370,11 @@ h1, h2 {
   max-width: 180px;
 }
 
-/* Левая занавеска - текст развернут в другую сторону */
+/* Левая занавеска - буквы перевернуты на 180 градусов */
 .side-curtain.left .production-title {
-  writing-mode: vertical-lr;
+  writing-mode: vertical-rl;
   text-orientation: upright;
-  transform: rotate(180deg);
-  transform-origin: center;
+  transform: scale(-1, -1);
 }
 
 /* Расположение на левом занавесе - случайное расположение */
