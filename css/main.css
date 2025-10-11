@@ -348,7 +348,7 @@ h1, h2 {
 /* Названия произведений на занавесах */
 .production-title {
   writing-mode: vertical-rl;
-  text-orientation: mixed;
+  text-orientation: upright;
   font-family: 'Playfair Display', serif;
   font-size: 28px;
   font-weight: 900;
@@ -373,6 +373,7 @@ h1, h2 {
 /* Левая занавеска - текст развернут в другую сторону */
 .side-curtain.left .production-title {
   writing-mode: vertical-lr;
+  text-orientation: upright;
   transform: rotate(180deg);
   transform-origin: center;
 }
