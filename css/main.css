@@ -385,9 +385,9 @@ h1, h2 {
 .side-curtain.left .production-title:nth-child(6) { top: 10%; right: 200px; } /* ГАМЛЕТ - перенесен левее и поднят до 10% от верха */
 
 /* Расположение на правом занавесе - случайное расположение */
-.side-curtain.right .production-title:nth-child(1) { top: 30%; left: 30px; }  /* МАКБЕТ - поднят на 5% */
-.side-curtain.right .production-title:nth-child(2) { top: 35%; left: 70px; }  /* ЭСМЕРАЛЬДА */
-.side-curtain.right .production-title:nth-child(3) { top: 15%; left: 110px; }  /* ОРЛЕАНСКАЯ ДЕВА - поднята еще на 5% */
+.side-curtain.right .production-title:nth-child(1) { top: 25%; left: 30px; }  /* МАКБЕТ - поднят на 5% */
+.side-curtain.right .production-title:nth-child(2) { top: 40%; left: 70px; }  /* ЭСМЕРАЛЬДА - опущена на 5% */
+.side-curtain.right .production-title:nth-child(3) { top: 10%; left: 110px; }  /* ОРЛЕАНСКАЯ ДЕВА - поднята до 10% от верха */
 .side-curtain.right .production-title:nth-child(4) { top: 20%; left: 150px; } /* АЛЬЦИНА - поднята на 5% */
 .side-curtain.right .production-title:nth-child(5) { top: 35%; left: 190px; } /* СОТВОРЕНИЕ МИРА - поднято на 20% */
 
