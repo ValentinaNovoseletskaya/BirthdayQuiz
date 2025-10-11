@@ -1,0 +1,23 @@
+# GitHub Pages configuration
+title: "Театральный вечер - Интерактивный квиз"
+description: "Интерактивный театральный квиз о постановках Большого театра"
+author: "Театральный вечер"
+
+# Disable Jekyll processing
+plugins: []
+markdown: kramdown
+highlighter: rouge
+
+# Site settings
+baseurl: "/BirthdayQuiz"
+url: "https://YOUR_USERNAME.github.io"
+
+# Build settings
+exclude:
+  - README.md
+  - TZ.md
+  - Quiz.md
+  - DESIGN.md
+  - test-notifications.html
+  - .gitignore
+  - .github/
