@@ -2,8 +2,12 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Театральный квиз - интерактивная викторина о постановках Большого театра">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#8B0000">
   <title>Театральный вечер | Квиз</title>
   <link rel="icon" href="assets/icons/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,6 +50,11 @@
       <div class="progress-fill" id="progressFill" style="width: 0%"></div>
       <span class="progress-text" id="progressText">0/35 фото</span>
     </div>
+  </div>
+
+  <!-- Мобильная галерея -->
+  <div class="mobile-gallery-preview" id="mobileGalleryPreview" style="display: none;">
+    <!-- Фотографии будут добавляться динамически -->
   </div>
 
   <div id="app">

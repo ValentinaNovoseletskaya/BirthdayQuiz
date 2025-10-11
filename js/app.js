@@ -27,6 +27,7 @@ function startQuiz() {
   AppState.init();
   AppState.clearProductionProgressVisuals();
   clearSideGalleryPhotos(); // Очищаем боковые галереи при начале нового квиза
+  clearMobileGallery(); // Очищаем мобильную галерею
   UI.showScreen('questionScreen');
   loadQuestion(0);
   UI.animateCurtain(true);
@@ -97,6 +98,7 @@ function checkAnswer(selectedIndex) {
     // playSound('applause'); // Звук отключен
     AppState.recordAnswer(q.id, true, currentAttempts, usedHints);
     AppState.addPhoto(q.photoPath);
+    addPhotoToMobileGallery(q.photoPath); // Добавляем в мобильную галерею
     AppState.updateProductionProgress(q.production); // Обновляем прогресс произведения
     
     // Раздвигаем занавесы и показываем вылет фото
@@ -145,6 +147,7 @@ function checkAnswer(selectedIndex) {
           'Не расстраивайтесь! Правильный ответ отмечен, и вы всё равно получите фотографию.',
           () => {
             AppState.addPhoto(q.photoPath);
+            addPhotoToMobileGallery(q.photoPath); // Добавляем в мобильную галерею
             UI.updateProgress(); // Обновляем прогресс-бар
             UI.showPhotoReveal(q.photoPath, AppState.currentQuestionIndex + 1);
           }
@@ -496,8 +499,10 @@ function initSideGalleries() {
 // Инициализируем галереи при загрузке
 window.addEventListener('DOMContentLoaded', () => {
   initSideGalleries();
+  initMobileGallery(); // Инициализируем мобильную галерею
   // Если есть сохраненные фото, восстановим их в слоты
   restoreSideGalleryPhotos();
+  restoreMobileGallery(); // Восстанавливаем мобильную галерею
 });
 
 document.addEventListener('keydown', (e) => {
@@ -557,5 +562,66 @@ function clearSideGalleryPhotos() {
     slot.classList.remove('filled');
   });
 }
+
+// ============= МОБИЛЬНАЯ ГАЛЕРЕЯ =============
+
+function initMobileGallery() {
+  const mobileGallery = document.getElementById('mobileGalleryPreview');
+  if (!mobileGallery) return;
+  
+  // Показываем мобильную галерею только на мобильных устройствах
+  if (window.innerWidth <= 768) {
+    mobileGallery.style.display = 'flex';
+  } else {
+    mobileGallery.style.display = 'none';
+  }
+}
+
+function addPhotoToMobileGallery(photoPath) {
+  const mobileGallery = document.getElementById('mobileGalleryPreview');
+  if (!mobileGallery || window.innerWidth > 768) return;
+  
+  const photoElement = document.createElement('img');
+  photoElement.src = photoPath;
+  photoElement.className = 'gallery-photo';
+  photoElement.alt = 'Собранное фото';
+  
+  mobileGallery.appendChild(photoElement);
+  
+  // Прокручиваем к последнему добавленному фото
+  mobileGallery.scrollLeft = mobileGallery.scrollWidth;
+}
+
+function restoreMobileGallery() {
+  const mobileGallery = document.getElementById('mobileGalleryPreview');
+  if (!mobileGallery || window.innerWidth > 768) return;
+  
+  mobileGallery.innerHTML = '';
+  
+  // Добавляем все собранные фото
+  AppState.collectedPhotos.forEach(photoPath => {
+    addPhotoToMobileGallery(photoPath);
+  });
+}
+
+function clearMobileGallery() {
+  const mobileGallery = document.getElementById('mobileGalleryPreview');
+  if (mobileGallery) {
+    mobileGallery.innerHTML = '';
+  }
+}
+
+// Обработчик изменения размера окна
+window.addEventListener('resize', () => {
+  const mobileGallery = document.getElementById('mobileGalleryPreview');
+  if (mobileGallery) {
+    if (window.innerWidth <= 768) {
+      mobileGallery.style.display = 'flex';
+      restoreMobileGallery(); // Восстанавливаем фото при переходе на мобильный
+    } else {
+      mobileGallery.style.display = 'none';
+    }
+  }
+});
 
 
