@@ -378,16 +378,16 @@ h1, h2 {
 
 /* Расположение на левом занавесе - случайное расположение */
 .side-curtain.left .production-title:nth-child(1) { top: 15%; right: 40px; }  /* ЩЕЛКУНЧИК */
-.side-curtain.left .production-title:nth-child(2) { top: 55%; right: 40px; }  /* ЖИЗЕЛЬ - опущена ниже */
+.side-curtain.left .production-title:nth-child(2) { top: 65%; right: 40px; }  /* ЖИЗЕЛЬ - опущена еще на 10% */
 .side-curtain.left .production-title:nth-child(3) { top: 70%; right: 80px; }  /* ЗОЛУШКА */
 .side-curtain.left .production-title:nth-child(4) { top: 25%; right: 120px; } /* ДОН КИХОТ */
 .side-curtain.left .production-title:nth-child(5) { top: 50%; right: 160px; } /* РАЙМОНДА - перенесена левее Гамлета, в середину по высоте */
-.side-curtain.left .production-title:nth-child(6) { top: 75%; right: 160px; } /* ГАМЛЕТ */
+.side-curtain.left .production-title:nth-child(6) { top: 10%; right: 200px; } /* ГАМЛЕТ - перенесен левее и поднят до 10% от верха */
 
 /* Расположение на правом занавесе - случайное расположение */
-.side-curtain.right .production-title:nth-child(1) { top: 35%; left: 30px; }  /* МАКБЕТ - опущен на 20% */
+.side-curtain.right .production-title:nth-child(1) { top: 30%; left: 30px; }  /* МАКБЕТ - поднят на 5% */
 .side-curtain.right .production-title:nth-child(2) { top: 35%; left: 70px; }  /* ЭСМЕРАЛЬДА */
-.side-curtain.right .production-title:nth-child(3) { top: 25%; left: 110px; }  /* ОРЛЕАНСКАЯ ДЕВА - поднята на 30% */
+.side-curtain.right .production-title:nth-child(3) { top: 20%; left: 110px; }  /* ОРЛЕАНСКАЯ ДЕВА - поднята на 5% */
 .side-curtain.right .production-title:nth-child(4) { top: 25%; left: 150px; } /* АЛЬЦИНА */
 .side-curtain.right .production-title:nth-child(5) { top: 35%; left: 190px; } /* СОТВОРЕНИЕ МИРА - поднято на 20% */
 
