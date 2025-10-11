@@ -83,7 +83,7 @@ const UI = {
     document.getElementById('revealedPhoto').src = photoPath;
     document.getElementById('photoNumberText').textContent = `Фото ${photoNumber} из ${AppState.totalQuestions}`;
     overlay.style.display = 'flex';
-    playSound('applause');
+    // playSound('applause'); // Звук отключен
   },
   hidePhotoReveal() { document.getElementById('photoRevealOverlay').style.display = 'none'; },
 
@@ -96,19 +96,8 @@ const UI = {
   },
 
   updateGalleryPreview() {
-    const grid = document.getElementById('galleryGrid');
-    grid.innerHTML = '';
-    for (let i = 0; i < AppState.totalQuestions; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'gallery-cell';
-      if (AppState.collectedPhotos[i]) {
-        cell.classList.add('filled');
-        cell.style.backgroundImage = `url(${AppState.collectedPhotos[i]})`;
-      } else {
-        cell.classList.add('empty');
-      }
-      grid.appendChild(cell);
-    }
+    // Функция отключена, так как элемент galleryGrid не существует
+    // Вместо этого используется боковая галерея
   },
 
   renderFinalGallery() {

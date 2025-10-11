@@ -94,7 +94,7 @@ function checkAnswer(selectedIndex) {
   currentAttempts++;
   UI.highlightAnswer(selectedIndex, isCorrect);
   if (isCorrect) {
-    playSound('applause');
+    // playSound('applause'); // Звук отключен
     AppState.recordAnswer(q.id, true, currentAttempts, usedHints);
     AppState.addPhoto(q.photoPath);
     AppState.updateProductionProgress(q.production); // Обновляем прогресс произведения
@@ -119,7 +119,7 @@ function checkAnswer(selectedIndex) {
       }, 600);
     }, 400);
   } else {
-    playSound('wrong');
+    // playSound('wrong'); // Звук отключен
     if (currentAttempts < maxAttempts) {
       if (currentAttempts === 1) UI.unlockHint(2);
       else if (currentAttempts === 2) UI.unlockHint(3);
@@ -145,6 +145,7 @@ function checkAnswer(selectedIndex) {
           'Не расстраивайтесь! Правильный ответ отмечен, и вы всё равно получите фотографию.',
           () => {
             AppState.addPhoto(q.photoPath);
+            UI.updateProgress(); // Обновляем прогресс-бар
             UI.showPhotoReveal(q.photoPath, AppState.currentQuestionIndex + 1);
           }
         );
@@ -161,47 +162,206 @@ function continueQuiz() {
 }
 
 function completeQuiz() {
+  console.log('completeQuiz вызвана');
   AppState.complete();
-  // Показ фейерверка и достижений
-  const fw = document.getElementById('fireworks');
-  const statsPanel = document.getElementById('statisticsPanel');
-  if (fw) fw.classList.remove('hidden');
+  
   // Скрыть форму квиза
   const questionScreen = document.getElementById('questionScreen');
   if (questionScreen) questionScreen.style.display = 'none';
-  // Показать панель достижений
-  if (statsPanel) statsPanel.scrollIntoView({ behavior: 'smooth' });
-  // Кнопка приз: свернуть достижения и показать слайдер с автопрокруткой
-  const prizeBtn = document.getElementById('prizeButton');
-  if (prizeBtn) {
-    prizeBtn.onclick = () => {
-      showFinalGallery();
-      switchViewMode('slider');
-      startAutoSlider();
-    };
-  } else {
-    // Фолбэк если нет кнопки по какой-то причине
-    showFinalGallery();
+  
+  // Показ фейерверка
+  const fw = document.getElementById('fireworks');
+  if (fw) {
+    fw.classList.remove('hidden');
+    // playSound('fireworks'); // Звук отключен
+    setTimeout(() => fw.classList.add('hidden'), 5000);
+  }
+  
+  // Показать окно достижений
+  showAchievementsWindow();
+}
+
+function showAchievementsWindow() {
+  console.log('showAchievementsWindow вызвана');
+  // Сначала показываем экран галереи
+  UI.showScreen('galleryScreen');
+  UI.renderFinalGallery();
+  UI.animateCurtain(true);
+  
+  // Показываем панель достижений
+  const statsPanel = document.getElementById('statisticsPanel');
+  console.log('statisticsPanel найден:', statsPanel);
+  if (statsPanel) {
+    statsPanel.style.display = 'block';
+    statsPanel.style.visibility = 'visible';
+    statsPanel.style.opacity = '1';
+    statsPanel.scrollIntoView({ behavior: 'smooth' });
+    
+    // Рендерим статистику
+    UI.renderStatistics();
+    
+    // Настраиваем кнопку "Приз"
+    const prizeBtn = document.getElementById('prizeButton');
+    console.log('Кнопка Приз найдена:', prizeBtn);
+    if (prizeBtn) {
+      console.log('Устанавливаем обработчик для кнопки Приз');
+      
+      // Удаляем все предыдущие обработчики
+      prizeBtn.onclick = null;
+      prizeBtn.removeEventListener('click', prizeBtn._prizeHandler);
+      
+      // Создаем новый обработчик
+      prizeBtn._prizeHandler = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Кнопка Приз нажата!');
+        
+        // Сворачиваем окно достижений
+        console.log('Вызываем collapseAchievementsWindow');
+        collapseAchievementsWindow();
+        
+        // Показываем слайдер
+        console.log('Вызываем showPrizeSlider');
+        showPrizeSlider();
+      };
+      
+      // Добавляем только один обработчик
+      prizeBtn.addEventListener('click', prizeBtn._prizeHandler);
+    } else {
+      console.error('Кнопка Приз не найдена!');
+    }
   }
 }
 
-function showFinalGallery() { UI.showScreen('galleryScreen'); UI.renderFinalGallery(); UI.animateCurtain(true); }
+function collapseAchievementsWindow() {
+  console.log('collapseAchievementsWindow вызвана');
+  const statsPanel = document.getElementById('statisticsPanel');
+  console.log('statsPanel для сворачивания:', statsPanel);
+  if (statsPanel) {
+    console.log('Сворачиваем панель достижений');
+    // Сворачиваем в иконку рядом с кнопками режимов
+    statsPanel.style.transform = 'scale(0.8)';
+    statsPanel.style.opacity = '0.9';
+    statsPanel.style.position = 'fixed';
+    statsPanel.style.top = '50px';
+    statsPanel.style.left = 'calc(50% - 400px)'; // Левее кнопки "Коллаж"
+    statsPanel.style.width = '120px';
+    statsPanel.style.height = '60px';
+    statsPanel.style.cursor = 'pointer';
+    statsPanel.style.zIndex = '2000';
+    statsPanel.style.borderRadius = '10px';
+    statsPanel.style.border = '3px solid var(--theatre-gold)';
+    statsPanel.style.background = 'rgba(184, 134, 11, 0.95)';
+    statsPanel.style.color = 'var(--theatre-dark-red)';
+    statsPanel.style.fontSize = '12px';
+    statsPanel.style.padding = '5px';
+    statsPanel.style.textAlign = 'center';
+    statsPanel.style.display = 'flex';
+    statsPanel.style.alignItems = 'center';
+    statsPanel.style.justifyContent = 'center';
+    statsPanel.style.boxShadow = '0 4px 12px rgba(0,0,0,0.5)';
+    
+    // Меняем содержимое на понятный текст
+    statsPanel.innerHTML = '<div style="font-weight: bold;">🏆 Достижения</div>';
+    
+    // Добавляем обработчик клика для разворачивания
+    statsPanel.onclick = () => {
+      console.log('Клик по свернутой панели - разворачиваем');
+      expandAchievementsWindow();
+    };
+  }
+}
+
+function expandAchievementsWindow() {
+  const statsPanel = document.getElementById('statisticsPanel');
+  if (statsPanel) {
+    // Возвращаем нормальный вид
+    statsPanel.style.transform = 'scale(1)';
+    statsPanel.style.opacity = '1';
+    statsPanel.style.position = '';
+    statsPanel.style.top = '';
+    statsPanel.style.right = '';
+    statsPanel.style.width = '';
+    statsPanel.style.height = '';
+    statsPanel.style.cursor = '';
+    statsPanel.style.zIndex = '';
+    
+    // Убираем обработчик клика
+    statsPanel.onclick = null;
+    
+    // Настраиваем кнопку "Приз" снова
+    const prizeBtn = document.getElementById('prizeButton');
+    console.log('Восстанавливаем обработчик для кнопки Приз:', prizeBtn);
+    if (prizeBtn) {
+      prizeBtn.onclick = () => {
+        console.log('Кнопка Приз нажата (восстановленный обработчик)!');
+        collapseAchievementsWindow();
+        showPrizeSlider();
+      };
+    }
+  }
+}
+
+function showPrizeSlider() {
+  console.log('showPrizeSlider вызвана');
+  // Переключаем в режим слайдера (экран галереи уже показан)
+  console.log('Переключаем в режим слайдера');
+  switchViewMode('slider');
+  console.log('Запускаем автопрокрутку');
+  startAutoSlider();
+  
+  // Добавляем кнопку закрытия слайдера
+  console.log('Добавляем кнопку закрытия');
+  addSliderCloseButton();
+}
+
+function addSliderCloseButton() {
+  const sliderView = document.getElementById('sliderView');
+  if (sliderView) {
+    // Создаем кнопку закрытия если её нет
+    let closeBtn = document.getElementById('sliderCloseBtn');
+    if (!closeBtn) {
+      closeBtn = document.createElement('button');
+      closeBtn.id = 'sliderCloseBtn';
+      closeBtn.className = 'slider-close-btn';
+      closeBtn.innerHTML = '✕';
+      closeBtn.onclick = () => {
+        stopAutoSlider();
+        showFinalGallery();
+      };
+      sliderView.appendChild(closeBtn);
+    }
+  }
+}
+
+function showFinalGallery() { 
+  UI.showScreen('galleryScreen'); 
+  UI.renderFinalGallery(); 
+  UI.animateCurtain(true); 
+}
 
 function switchViewMode(mode) {
+  console.log('switchViewMode вызвана с режимом:', mode);
   const collageView = document.getElementById('collageView');
   const sliderView = document.getElementById('sliderView');
   const collageBtn = document.getElementById('collageMode');
   const sliderBtn = document.getElementById('sliderMode');
+  
+  console.log('Элементы найдены:', { collageView, sliderView, collageBtn, sliderBtn });
+  
   if (mode === 'collage') {
+    console.log('Переключаемся в режим коллажа');
     collageView.style.display = 'grid';
     sliderView.style.display = 'none';
     collageBtn.classList.add('active');
     sliderBtn.classList.remove('active');
   } else {
+    console.log('Переключаемся в режим слайдера');
     collageView.style.display = 'none';
     sliderView.style.display = 'block';
     sliderBtn.classList.add('active');
     collageBtn.classList.remove('active');
+    console.log('Показываем слайд с индексом:', currentSlideIndex);
     showSlide(currentSlideIndex);
   }
 }
@@ -217,11 +377,25 @@ function prevPhoto() { showSlide(currentSlideIndex - 1); }
 function nextPhoto() { showSlide(currentSlideIndex + 1); }
 
 let autoSliderTimer = null;
+let autoSliderCounter = 0;
 function startAutoSlider() {
   clearInterval(autoSliderTimer);
-  autoSliderTimer = setInterval(() => nextPhoto(), 3000);
+  autoSliderCounter = 0;
+  autoSliderTimer = setInterval(() => {
+    nextPhoto();
+    autoSliderCounter++;
+    
+    // Автоматически закрываем слайдер после показа всех фото
+    if (autoSliderCounter >= AppState.collectedPhotos.length) {
+      stopAutoSlider();
+      showFinalGallery();
+    }
+  }, 3000);
 }
-function stopAutoSlider() { clearInterval(autoSliderTimer); }
+function stopAutoSlider() { 
+  clearInterval(autoSliderTimer); 
+  autoSliderCounter = 0;
+}
 
 function toggleGalleryPreview() {
   const preview = document.getElementById('galleryPreview');

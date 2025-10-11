@@ -1,11 +1,6 @@
 function playSound(soundName) {
-  const soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
-  if (!soundEnabled) return;
-  try {
-    const audio = new Audio(`assets/sounds/${soundName}.mp3`);
-    audio.volume = 0.3;
-    audio.play().catch(() => {});
-  } catch (e) { console.log('Ошибка воспроизведения звука:', e); }
+  // Звуки отключены
+  console.log(`Звук ${soundName} отключен`);
 }
 
 async function downloadAllPhotos() {

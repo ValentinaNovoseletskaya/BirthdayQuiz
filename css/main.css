@@ -360,6 +360,14 @@ h1, h2 {
   transition: all 0.8s ease;
   user-select: none;
   pointer-events: none;
+  /* Запрещаем перенос слов */
+  white-space: nowrap;
+  overflow: hidden;
+  /* Ограничиваем область от кисточек до низа экрана */
+  min-height: 60px; /* Минимальный отступ от кисточек */
+  max-height: calc(100vh - 220px); /* До низа экрана с учетом верхнего занавеса */
+  /* Ограничиваем ширину чтобы не выходило за границы */
+  max-width: 180px;
 }
 
 /* Левая занавеска - текст развернут в другую сторону */
@@ -369,22 +377,21 @@ h1, h2 {
   transform-origin: center;
 }
 
-/* Расположение на левом занавесе - с большим пространством */
-.side-curtain.left .production-title:nth-child(1) { top: 5%; right: 80px; }
-.side-curtain.left .production-title:nth-child(2) { top: 20%; right: 120px; }
-.side-curtain.left .production-title:nth-child(3) { top: 35%; right: 60px; }
-.side-curtain.left .production-title:nth-child(4) { top: 50%; right: 100px; }
-.side-curtain.left .production-title:nth-child(5) { top: 65%; right: 70px; }
-.side-curtain.left .production-title:nth-child(6) { top: 82%; right: 110px; }
+/* Расположение на левом занавесе - случайное расположение */
+.side-curtain.left .production-title:nth-child(1) { top: 15%; right: 40px; }  /* ЩЕЛКУНЧИК */
+.side-curtain.left .production-title:nth-child(2) { top: 45%; right: 40px; }  /* ЖИЗЕЛЬ - короткое, может быть в той же линии */
+.side-curtain.left .production-title:nth-child(3) { top: 70%; right: 80px; }  /* ЗОЛУШКА */
+.side-curtain.left .production-title:nth-child(4) { top: 25%; right: 120px; } /* ДОН КИХОТ */
+.side-curtain.left .production-title:nth-child(5) { top: 55%; right: 120px; } /* РАЙМОНДА */
+.side-curtain.left .production-title:nth-child(6) { top: 75%; right: 160px; } /* ГАМЛЕТ */
 
-/* Расположение на правом занавесе - с большим пространством */
-.side-curtain.right .production-title:nth-child(1) { top: 5%; left: 80px; }
-.side-curtain.right .production-title:nth-child(2) { top: 22%; left: 100px; }
-.side-curtain.right .production-title:nth-child(3) { top: 38%; left: 60px; }
-.side-curtain.right .production-title:nth-child(4) { top: 56%; left: 90px; }
-.side-curtain.right .production-title:nth-child(5) { top: 72%; left: 70px; }
+/* Расположение на правом занавесе - случайное расположение */
+.side-curtain.right .production-title:nth-child(1) { top: 15%; left: 30px; }  /* МАКБЕТ */
+.side-curtain.right .production-title:nth-child(2) { top: 35%; left: 70px; }  /* ЭСМЕРАЛЬДА */
+.side-curtain.right .production-title:nth-child(3) { top: 55%; left: 110px; }  /* ОРЛЕАНСКАЯ ДЕВА */
+.side-curtain.right .production-title:nth-child(4) { top: 25%; left: 150px; } /* АЛЬЦИНА */
+.side-curtain.right .production-title:nth-child(5) { top: 55%; left: 190px; } /* СОТВОРЕНИЕ МИРА */
 
-.production-title { line-break: anywhere; }
 
 /* ====== Достижения и фейерверк ====== */
 .achievements-overlay {
@@ -2165,6 +2172,35 @@ h1, h2 {
   margin: 0 auto;
   position: relative;
   z-index: 1;
+}
+
+/* Кнопка закрытия слайдера */
+.slider-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--theatre-gold);
+  color: var(--theatre-dark-red);
+  border: 2px solid var(--theatre-dark-gold);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.slider-close-btn:hover {
+  background: var(--theatre-dark-gold);
+  color: var(--theatre-gold);
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
 
 .slider-photo-container {
