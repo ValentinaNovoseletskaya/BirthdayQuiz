@@ -3,29 +3,7 @@ function playSound(soundName) {
   console.log(`Звук ${soundName} отключен`);
 }
 
-async function downloadAllPhotos() {
-  try {
-    const zip = new JSZip();
-    const folder = zip.folder('theatre_photos');
-    for (let i = 0; i < AppState.collectedPhotos.length; i++) {
-      const photoPath = AppState.collectedPhotos[i];
-      const response = await fetch(photoPath);
-      const blob = await response.blob();
-      folder.file(`photo-${String(i + 1).padStart(2, '0')}.jpg`, blob);
-    }
-    const content = await zip.generateAsync({ type: 'blob' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(content);
-    link.download = 'theatre_memories.zip';
-    link.click();
-  } catch (e) {
-    console.error('Ошибка создания архива:', e);
-    showNotification(
-      'Ошибка',
-      'К сожалению, не удалось создать архив с фотографиями. Попробуйте ещё раз.'
-    );
-  }
-}
+// Функция downloadAllPhotos удалена - кнопка скачивания больше не нужна
 
 function openFullscreen(photoPath) {
   const overlay = document.createElement('div');

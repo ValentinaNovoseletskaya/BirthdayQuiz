@@ -1,0 +1,81 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="fireworkGradient1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#FF6347;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC143C;stop-opacity:0.8" />
+    </radialGradient>
+    <radialGradient id="fireworkGradient2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#9370DB;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#4169E1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0000CD;stop-opacity:0.8" />
+    </radialGradient>
+    <radialGradient id="fireworkGradient3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#32CD32;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#00FF00;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#00CED1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#008B8B;stop-opacity:0.8" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Центральная точка взрыва -->
+  <circle cx="100" cy="100" r="3" fill="#FFD700" opacity="0.9" filter="url(#glow)"/>
+  
+  <!-- Основные лучи фейерверка -->
+  <line x1="100" y1="100" x2="100" y2="40" stroke="url(#fireworkGradient1)" stroke-width="2" opacity="0.8" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="100" y2="160" stroke="url(#fireworkGradient1)" stroke-width="2" opacity="0.8" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="40" y2="100" stroke="url(#fireworkGradient1)" stroke-width="2" opacity="0.8" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="160" y2="100" stroke="url(#fireworkGradient1)" stroke-width="2" opacity="0.8" filter="url(#glow)"/>
+  
+  <!-- Диагональные лучи -->
+  <line x1="100" y1="100" x2="60" y2="60" stroke="url(#fireworkGradient1)" stroke-width="1.5" opacity="0.7" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="140" y2="60" stroke="url(#fireworkGradient1)" stroke-width="1.5" opacity="0.7" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="60" y2="140" stroke="url(#fireworkGradient1)" stroke-width="1.5" opacity="0.7" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="140" y2="140" stroke="url(#fireworkGradient1)" stroke-width="1.5" opacity="0.7" filter="url(#glow)"/>
+  
+  <!-- Дополнительные лучи -->
+  <line x1="100" y1="100" x2="80" y2="50" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="120" y2="50" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="80" y2="150" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="120" y2="150" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  
+  <line x1="100" y1="100" x2="50" y2="80" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="150" y2="80" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="50" y2="120" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  <line x1="100" y1="100" x2="150" y2="120" stroke="url(#fireworkGradient2)" stroke-width="1.2" opacity="0.6" filter="url(#glow)"/>
+  
+  <!-- Искры и частицы -->
+  <circle cx="70" cy="70" r="2" fill="url(#fireworkGradient3)" opacity="0.8" filter="url(#glow)"/>
+  <circle cx="130" cy="70" r="2" fill="url(#fireworkGradient3)" opacity="0.8" filter="url(#glow)"/>
+  <circle cx="70" cy="130" r="2" fill="url(#fireworkGradient3)" opacity="0.8" filter="url(#glow)"/>
+  <circle cx="130" cy="130" r="2" fill="url(#fireworkGradient3)" opacity="0.8" filter="url(#glow)"/>
+  
+  <circle cx="85" cy="55" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="115" cy="55" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="85" cy="145" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="115" cy="145" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  
+  <circle cx="55" cy="85" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="145" cy="85" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="55" cy="115" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="145" cy="115" r="1.5" fill="#FFD700" opacity="0.7" filter="url(#glow)"/>
+  
+  <!-- Мелкие искры -->
+  <circle cx="65" cy="65" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="135" cy="65" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="65" cy="135" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="135" cy="135" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="100" cy="60" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="100" cy="140" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="60" cy="100" r="1" fill="#FFF" opacity="0.6"/>
+  <circle cx="140" cy="100" r="1" fill="#FFF" opacity="0.6"/>
+</svg>

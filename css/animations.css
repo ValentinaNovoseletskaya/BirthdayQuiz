@@ -226,4 +226,97 @@
   }
 }
 
+/* ============= УЛУЧШЕННЫЙ ФЕЙЕРВЕРК ============= */
+.fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.fireworks:not(.hidden) {
+  opacity: 1;
+}
+
+.fire-burst {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.fire-burst::before,
+.fire-burst::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.fire-burst::before {
+  box-shadow:
+    0 0 20px 10px #FFD700,
+    0 0 40px 20px #FFA500,
+    0 0 60px 30px #FF6347;
+  animation: burst 1.5s ease-out infinite;
+}
+
+.fire-burst::after {
+  box-shadow:
+    0 0 30px 15px #FF1493,
+    0 0 50px 25px #9370DB;
+  animation: burst 1.5s ease-out 0.3s infinite;
+}
+
+@keyframes burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+.fire-burst.left { 
+  animation-delay: 0s; 
+}
+
+.fire-burst.center { 
+  animation-delay: 0.5s; 
+}
+
+.fire-burst.right { 
+  animation-delay: 1s; 
+}
+
+@media (max-width: 768px) {
+  .fire-burst {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fire-burst {
+    width: 80px;
+    height: 80px;
+  }
+}
+
 

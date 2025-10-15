@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120">
+  <defs>
+    <linearGradient id="trophyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="baseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Основание трофея -->
+  <rect x="35" y="90" width="30" height="15" rx="5" fill="url(#baseGradient)" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Ножка трофея -->
+  <rect x="45" y="70" width="10" height="20" fill="url(#trophyGradient)" stroke="#B8860B" stroke-width="1"/>
+  
+  <!-- Чаша трофея -->
+  <path d="M25 70 Q50 50 75 70 L70 65 Q50 55 30 65 Z" fill="url(#trophyGradient)" stroke="#B8860B" stroke-width="2"/>
+  
+  <!-- Внутренняя часть чаши -->
+  <path d="M30 65 Q50 60 70 65 L65 60 Q50 58 35 60 Z" fill="#FFF8DC" opacity="0.3"/>
+  
+  <!-- Ручки трофея -->
+  <path d="M25 70 Q15 60 20 50 Q25 45 30 50 Q25 55 25 70" fill="url(#trophyGradient)" stroke="#B8860B" stroke-width="1"/>
+  <path d="M75 70 Q85 60 80 50 Q75 45 70 50 Q75 55 75 70" fill="url(#trophyGradient)" stroke="#B8860B" stroke-width="1"/>
+  
+  <!-- Театральная маска на трофее -->
+  <circle cx="50" cy="55" r="8" fill="#8B0000" stroke="#FFD700" stroke-width="1"/>
+  <path d="M45 55 Q50 50 55 55" stroke="#FFD700" stroke-width="2" fill="none"/>
+  <circle cx="47" cy="52" r="1" fill="#FFD700"/>
+  <circle cx="53" cy="52" r="1" fill="#FFD700"/>
+  
+  <!-- Блеск -->
+  <circle cx="50" cy="55" r="3" fill="#FFD700" opacity="0.6" filter="url(#glow)"/>
+</svg>

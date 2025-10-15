@@ -223,20 +223,22 @@ function completeQuiz() {
   console.log('completeQuiz вызвана');
   AppState.complete();
   
-  // Скрыть форму квиза
-  const questionScreen = document.getElementById('questionScreen');
-  if (questionScreen) questionScreen.style.display = 'none';
-  
-  // Показ фейерверка
-  const fw = document.getElementById('fireworks');
-  if (fw) {
-    fw.classList.remove('hidden');
-    // playSound('fireworks'); // Звук отключен
-    setTimeout(() => fw.classList.add('hidden'), 5000);
+  // Вызываем новую функцию showGallery с эффектами
+  if (typeof showGallery === 'function') {
+    showGallery();
+  } else {
+    // Фоллбэк на старую логику
+    const questionScreen = document.getElementById('questionScreen');
+    if (questionScreen) questionScreen.style.display = 'none';
+    
+    const fw = document.getElementById('fireworks');
+    if (fw) {
+      fw.classList.remove('hidden');
+      setTimeout(() => fw.classList.add('hidden'), 5000);
+    }
+    
+    showAchievementsWindow();
   }
-  
-  // Показать окно достижений
-  showAchievementsWindow();
 }
 
 function showAchievementsWindow() {
@@ -253,7 +255,8 @@ function showAchievementsWindow() {
     statsPanel.style.display = 'block';
     statsPanel.style.visibility = 'visible';
     statsPanel.style.opacity = '1';
-    statsPanel.scrollIntoView({ behavior: 'smooth' });
+    // Убираем автоматическую прокрутку к статистике
+    // statsPanel.scrollIntoView({ behavior: 'smooth' });
     
     // Рендерим статистику
     UI.renderStatistics();
@@ -383,9 +386,38 @@ function addSliderCloseButton() {
       closeBtn.id = 'sliderCloseBtn';
       closeBtn.className = 'slider-close-btn';
       closeBtn.innerHTML = '✕';
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
       closeBtn.onclick = () => {
+        console.log('Кнопка закрытия слайдера нажата');
         stopAutoSlider();
-        showFinalGallery();
+        // Скрываем слайдер и показываем поздравление
+        const sliderView = document.getElementById('sliderView');
+        if (sliderView) {
+          sliderView.style.display = 'none';
+          sliderView.classList.remove('slider-view-fullscreen');
+        }
+        // Показываем кнопки переключения режимов
+        const collageBtn = document.getElementById('collageMode');
+        const sliderBtn = document.getElementById('sliderMode');
+        if (collageBtn) collageBtn.style.display = 'block';
+        if (sliderBtn) sliderBtn.style.display = 'block';
+        showBirthdayCongratulation();
       };
       sliderView.appendChild(closeBtn);
     }
@@ -430,9 +462,52 @@ function showSlide(index) {
   currentSlideIndex = index;
   document.getElementById('sliderPhoto').src = AppState.collectedPhotos[index] || '';
   document.getElementById('sliderCounter').textContent = `${index + 1} / ${AppState.totalQuestions}`;
+  
+  // Сценарий 2: Если пользователь дошел до последнего фото (35) вручную
+  if (index === AppState.collectedPhotos.length - 1) {
+    console.log('Достигнуто последнее фото (35) - закрываем слайдер');
+    stopAutoSlider();
+    setTimeout(() => {
+      const sliderView = document.getElementById('sliderView');
+      if (sliderView) {
+        sliderView.style.display = 'none';
+        sliderView.classList.remove('slider-view-fullscreen');
+      }
+      // Показываем кнопки переключения режимов
+      const collageBtn = document.getElementById('collageMode');
+      const sliderBtn = document.getElementById('sliderMode');
+      if (collageBtn) collageBtn.style.display = 'block';
+      if (sliderBtn) sliderBtn.style.display = 'block';
+      showBirthdayCongratulation();
+    }, 1000); // Даем время пользователю увидеть последнее фото
+  }
 }
+
+// Убираем обработчик клика по фото в слайдере
+// Клик по фото больше не закрывает слайдер
 function prevPhoto() { showSlide(currentSlideIndex - 1); }
-function nextPhoto() { showSlide(currentSlideIndex + 1); }
+function nextPhoto() { 
+  // Проверяем, не достигли ли мы последнего фото
+  if (currentSlideIndex >= AppState.collectedPhotos.length - 1) {
+    console.log('Нажата стрелка вправо на последнем фото - закрываем слайдер');
+    stopAutoSlider();
+    setTimeout(() => {
+      const sliderView = document.getElementById('sliderView');
+      if (sliderView) {
+        sliderView.style.display = 'none';
+        sliderView.classList.remove('slider-view-fullscreen');
+      }
+      // Показываем кнопки переключения режимов
+      const collageBtn = document.getElementById('collageMode');
+      const sliderBtn = document.getElementById('sliderMode');
+      if (collageBtn) collageBtn.style.display = 'block';
+      if (sliderBtn) sliderBtn.style.display = 'block';
+      showBirthdayCongratulation();
+    }, 500);
+  } else {
+    showSlide(currentSlideIndex + 1); 
+  }
+}
 
 let autoSliderTimer = null;
 let autoSliderCounter = 0;
@@ -446,7 +521,8 @@ function startAutoSlider() {
     // Автоматически закрываем слайдер после показа всех фото
     if (autoSliderCounter >= AppState.collectedPhotos.length) {
       stopAutoSlider();
-      showFinalGallery();
+      console.log('Автопрокрутка завершена, показываем поздравление');
+      showBirthdayCongratulation();
     }
   }, 3000);
 }

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100">
+  <defs>
+    <linearGradient id="curtainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B0000;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#DC143C;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#8B0000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tasselGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A574;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="fabricPattern" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="transparent"/>
+      <line x1="0" y1="0" x2="4" y2="4" stroke="#000" stroke-width="0.5" opacity="0.1"/>
+      <line x1="4" y1="0" x2="0" y2="4" stroke="#000" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Основной занавес -->
+  <rect x="0" y="0" width="120" height="100" fill="url(#curtainGradient)"/>
+  
+  <!-- Текстура ткани -->
+  <rect x="0" y="0" width="120" height="100" fill="url(#fabricPattern)"/>
+  
+  <!-- Складки занавеса -->
+  <path d="M0 0 Q20 10 40 0 Q60 10 80 0 Q100 10 120 0" stroke="#654321" stroke-width="2" fill="none"/>
+  <path d="M0 20 Q20 30 40 20 Q60 30 80 20 Q100 30 120 20" stroke="#654321" stroke-width="1" fill="none" opacity="0.7"/>
+  <path d="M0 40 Q20 50 40 40 Q60 50 80 40 Q100 50 120 40" stroke="#654321" stroke-width="1" fill="none" opacity="0.5"/>
+  
+  <!-- Кисточки -->
+  <g id="tassels">
+    <!-- Левая кисточка -->
+    <rect x="10" y="0" width="3" height="15" fill="url(#tasselGradient)"/>
+    <circle cx="11.5" cy="15" r="2" fill="url(#tasselGradient)"/>
+    <line x1="9" y1="17" x2="14" y2="17" stroke="#B8860B" stroke-width="1"/>
+    <line x1="9.5" y1="18" x2="13.5" y2="18" stroke="#B8860B" stroke-width="1"/>
+    <line x1="10" y1="19" x2="13" y2="19" stroke="#B8860B" stroke-width="1"/>
+    
+    <!-- Центральная кисточка -->
+    <rect x="58" y="0" width="4" height="18" fill="url(#tasselGradient)"/>
+    <circle cx="60" cy="18" r="2.5" fill="url(#tasselGradient)"/>
+    <line x1="57" y1="20" x2="63" y2="20" stroke="#B8860B" stroke-width="1"/>
+    <line x1="57.5" y1="21" x2="62.5" y2="21" stroke="#B8860B" stroke-width="1"/>
+    <line x1="58" y1="22" x2="62" y2="22" stroke="#B8860B" stroke-width="1"/>
+    
+    <!-- Правая кисточка -->
+    <rect x="107" y="0" width="3" height="15" fill="url(#tasselGradient)"/>
+    <circle cx="108.5" cy="15" r="2" fill="url(#tasselGradient)"/>
+    <line x1="106" y1="17" x2="111" y2="17" stroke="#B8860B" stroke-width="1"/>
+    <line x1="106.5" y1="18" x2="110.5" y2="18" stroke="#B8860B" stroke-width="1"/>
+    <line x1="107" y1="19" x2="110" y2="19" stroke="#B8860B" stroke-width="1"/>
+  </g>
+  
+  <!-- Золотая кайма -->
+  <rect x="0" y="0" width="120" height="3" fill="#FFD700"/>
+  <rect x="0" y="97" width="120" height="3" fill="#FFD700"/>
+  <rect x="0" y="0" width="3" height="100" fill="#FFD700"/>
+  <rect x="117" y="0" width="3" height="100" fill="#FFD700"/>
+</svg>

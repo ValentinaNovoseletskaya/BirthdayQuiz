@@ -1,0 +1,678 @@
+/* ========================================
+   CELEBRATIONS.CSS
+   Праздничные эффекты и анимации
+   ======================================== */
+
+/* === 1. КОНФЕТТИ И БЛЕСТКИ === */
+.celebration-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+  display: none;
+}
+
+.celebration-particles.active {
+  display: block;
+}
+
+.sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  animation: fall linear forwards;
+  opacity: 0;
+}
+
+.sparkle::before {
+  content: '✨';
+  font-size: 12px;
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8));
+}
+
+.sparkle.confetti::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--confetti-color, #FFD700);
+  display: block;
+  border-radius: 50%;
+}
+
+@keyframes fall {
+  0% {
+    top: -10%;
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    top: 110%;
+    opacity: 0.3;
+    transform: translateX(var(--drift)) rotate(720deg);
+  }
+}
+
+/* === 2. ТОРЖЕСТВЕННЫЙ ОВЕРЛЕЙ === */
+.completion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.completion-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: fadeInScale 1s ease-out;
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  /* Привязываем к кисточкам занавеса: 120px (высота занавеса) + 60px (высота кисточек) + 2px (отступ) */
+  margin-top: 182px; /* 120px + 60px + 2px = 182px от верха экрана */
+}
+
+.trophy-icon {
+  width: 120px;
+  height: 144px;
+  animation: bounce 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+}
+
+.completion-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  color: #FFD700;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 165, 0, 0.6);
+  margin: 20px 0;
+  letter-spacing: 0.3em;
+}
+
+.completion-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  color: #FFF;
+  margin-bottom: 40px;
+}
+
+.curtain-open-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Занавес независим от окна БРАВО и сразу появляется на весь экран */
+}
+
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100vh;
+  transition: transform 3s ease-in-out;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      #8B0000 0px,
+      #DC143C 20px,
+      #8B0000 40px,
+      #A52A2A 60px,
+      #8B0000 80px,
+      #DC143C 100px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 1px,
+      rgba(0,0,0,0.1) 1px,
+      rgba(0,0,0,0.1) 2px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0,0,0,0.08) 1px,
+      rgba(0,0,0,0.08) 2px
+    ),
+    radial-gradient(ellipse at center, rgba(255,255,255,0.05) 0%, transparent 50%);
+  background-size: 100% 100%, 8px 100%, 100% 8px, 100% 100%;
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.6),
+    0 0 20px rgba(0,0,0,0.5);
+  /* Анимация управляется через JavaScript */
+}
+
+/* Бежевая кайма по краю занавесов */
+.curtain-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18px;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(255,255,255,0.05) 1px,
+      transparent 2px,
+      rgba(0,0,0,0.1) 3px,
+      transparent 4px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(212,175,119,0.8) 0%,
+      rgba(184,134,11,0.6) 50%,
+      rgba(212,175,119,0.8) 100%
+    );
+  border-left: 1px solid rgba(255,255,255,0.2);
+  border-right: 1px solid rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+.curtain-panel.left-panel {
+  left: 0;
+  transform-origin: left;
+}
+
+.curtain-panel.left-panel::before {
+  right: 0;
+}
+
+.curtain-panel.right-panel {
+  right: 0;
+  transform-origin: right;
+}
+
+.curtain-panel.right-panel::before {
+  left: 0;
+  box-shadow: 
+    inset 2px 0 4px rgba(0,0,0,0.3),
+    inset -2px 0 4px rgba(0,0,0,0.3),
+    0 0 10px rgba(212,175,119,0.3);
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  50% { 
+    transform: translateY(-30px); 
+  }
+}
+
+/* Анимация openCurtain удалена - раздвижение занавеса управляется через JavaScript */
+
+/* === ФЕЙЕРВЕРК ПОСЛЕ ЗАНАВЕСА === */
+.fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10001;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.fireworks:not(.hidden) {
+  opacity: 1;
+}
+
+.fire-burst {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  animation: burstFloat 3s ease-in-out infinite;
+}
+
+.firework-svg {
+  width: 100%;
+  height: 100%;
+  animation: burstRotate 2s linear infinite;
+}
+
+.fire-burst.left { 
+  animation-delay: 0s; 
+}
+
+.fire-burst.center { 
+  animation-delay: 0.5s; 
+}
+
+.fire-burst.right { 
+  animation-delay: 1s; 
+}
+
+@keyframes burstFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes burstRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* === 3. ДЕКОРАТИВНЫЕ ЗВЕЗДЫ === */
+.corner-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.corner-stars .star {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.star.top-left { 
+  top: 20px; 
+  left: 20px; 
+  animation-delay: 0s; 
+}
+
+.star.top-right { 
+  top: 20px; 
+  right: 20px; 
+  animation-delay: 0.5s; 
+}
+
+.star.bottom-left { 
+  bottom: 20px; 
+  left: 20px; 
+  animation-delay: 1s; 
+}
+
+.star.bottom-right { 
+  bottom: 20px; 
+  right: 20px; 
+  animation-delay: 1.5s; 
+}
+
+@keyframes twinkle {
+  0%, 100% { 
+    opacity: 0.4; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.2);
+  }
+}
+
+/* === 4. ЗОЛОТАЯ РАМКА === */
+.final-gallery {
+  position: relative;
+  padding: 20px;
+}
+
+.final-gallery::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: none; /* Убираем моргающую желтую рамку */
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes borderGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+  }
+  50% { 
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+  }
+}
+
+/* === 5. ПОЗДРАВЛЕНИЕ === */
+.birthday-congratulation {
+  width: 90%;
+  max-width: 700px;
+  margin: 40px auto 20px;
+  padding: 25px 30px;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(220, 20, 60, 0.2));
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 15px;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Эмодзи масок удалены из окна поздравления */
+
+.congrats-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.congrats-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #FFD700;
+  margin: 0 0 15px 0;
+  text-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.5),
+    2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.05em;
+  animation: glow 2s ease-in-out infinite;
+}
+
+.congrats-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: #FFF;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.congrats-message strong {
+  color: #FFD700;
+  font-size: 1.3em;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 
+      0 0 10px rgba(255, 215, 0, 0.5),
+      2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    text-shadow: 
+      0 0 20px rgba(255, 215, 0, 0.8),
+      0 0 30px rgba(255, 165, 0, 0.6),
+      2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* === СТАТИСТИКА В ОВЕРЛЕЕ === */
+.completion-statistics {
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(220, 20, 60, 0.3));
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 30px 0;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  backdrop-filter: blur(10px);
+  max-width: 600px;
+  width: 100%;
+}
+
+.stats-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #FFD700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  margin: 0 0 20px 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.stats-trophy-icon {
+  width: 30px;
+  height: 36px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.stat-icon {
+  font-size: 1.2rem;
+}
+
+.stat-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: #FFF;
+  flex: 1;
+}
+
+.stat-value {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: #FFD700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.prize-button {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border: 2px solid #FFD700;
+  border-radius: 25px;
+  padding: 15px 30px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #8B0000;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 6px 15px rgba(255, 215, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  display: block;
+  margin: 0 auto;
+  width: 250px;
+}
+
+.prize-button:hover {
+  background: linear-gradient(135deg, #FFA500, #FFD700);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 20px rgba(255, 215, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.prize-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 4px 10px rgba(255, 215, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* === АДАПТАЦИЯ === */
+@media (max-width: 1024px) {
+  .corner-stars .star {
+    width: 30px;
+    height: 30px;
+  }
+  .completion-title {
+    font-size: 3rem;
+  }
+  .trophy-icon {
+    width: 90px;
+    height: 108px;
+  }
+}
+
+@media (max-width: 768px) {
+  .celebration-particles .sparkle {
+    width: 6px;
+    height: 6px;
+  }
+  .celebration-particles .sparkle::before {
+    font-size: 10px;
+  }
+  .final-gallery::before {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-width: 2px;
+  }
+  .corner-stars .star {
+    width: 24px;
+    height: 24px;
+  }
+  .star.top-left { top: 10px; left: 10px; }
+  .star.top-right { top: 10px; right: 10px; }
+  .star.bottom-left { bottom: 10px; left: 10px; }
+  .star.bottom-right { bottom: 10px; right: 10px; }
+  .birthday-congratulation {
+    width: 95%;
+    padding: 20px 15px;
+    margin: 30px auto 15px;
+  }
+  .congrats-title {
+    font-size: 1.8rem;
+  }
+  .congrats-message {
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+  /* Эмодзи масок удалены */
+  .completion-title {
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+  }
+  .completion-message {
+    font-size: 1.4rem;
+  }
+  .trophy-icon {
+    width: 75px;
+    height: 90px;
+  }
+  .completion-statistics {
+    padding: 20px;
+    margin: 20px 0;
+  }
+  .stats-title {
+    font-size: 1.5rem;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .stat-item {
+    padding: 8px;
+  }
+  .stat-label {
+    font-size: 0.9rem;
+  }
+  .prize-button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    width: 200px;
+  }
+  .completion-content {
+    margin-top: 180px; /* Максимально опускаем для мобильных */
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .congrats-title {
+    font-size: 1.6rem;
+  }
+  .congrats-message {
+    font-size: 1.1rem;
+  }
+  .congrats-message strong {
+    font-size: 1.2em;
+  }
+  .completion-title {
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+  }
+  .completion-message {
+    font-size: 1.2rem;
+  }
+  .trophy-icon {
+    width: 60px;
+    height: 72px;
+  }
+  .corner-stars .star {
+    width: 20px;
+    height: 20px;
+  }
+  .completion-content {
+    margin-top: 160px; /* Максимально опускаем для маленьких экранов */
+    padding: 15px 10px;
+  }
+}
+

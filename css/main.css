@@ -379,17 +379,17 @@ h1, h2 {
 /* Расположение на левом занавесе - случайное расположение */
 .side-curtain.left .production-title:nth-child(1) { top: 15%; right: 40px; }  /* ЩЕЛКУНЧИК */
 .side-curtain.left .production-title:nth-child(2) { top: 65%; right: 40px; }  /* ЖИЗЕЛЬ - опущена еще на 10% */
-.side-curtain.left .production-title:nth-child(3) { top: 70%; right: 80px; }  /* ЗОЛУШКА */
+.side-curtain.left .production-title:nth-child(3) { top: 60%; right: 80px; }  /* ЗОЛУШКА - поднята на 10% */
 .side-curtain.left .production-title:nth-child(4) { top: 25%; right: 120px; } /* ДОН КИХОТ */
 .side-curtain.left .production-title:nth-child(5) { top: 50%; right: 160px; } /* РАЙМОНДА - перенесена левее Гамлета, в середину по высоте */
 .side-curtain.left .production-title:nth-child(6) { top: 10%; right: 200px; } /* ГАМЛЕТ - перенесен левее и поднят до 10% от верха */
 
 /* Расположение на правом занавесе - случайное расположение */
-.side-curtain.right .production-title:nth-child(1) { top: 25%; left: 30px; }  /* МАКБЕТ - поднят на 5% */
-.side-curtain.right .production-title:nth-child(2) { top: 40%; left: 70px; }  /* ЭСМЕРАЛЬДА - опущена на 5% */
+.side-curtain.right .production-title:nth-child(1) { top: 20%; left: 30px; }  /* МАКБЕТ - поднят еще на 5% */
+.side-curtain.right .production-title:nth-child(2) { top: 45%; left: 70px; }  /* ЭСМЕРАЛЬДА - опущена еще на 5% */
 .side-curtain.right .production-title:nth-child(3) { top: 10%; left: 110px; }  /* ОРЛЕАНСКАЯ ДЕВА - поднята до 10% от верха */
 .side-curtain.right .production-title:nth-child(4) { top: 20%; left: 150px; } /* АЛЬЦИНА - поднята на 5% */
-.side-curtain.right .production-title:nth-child(5) { top: 35%; left: 190px; } /* СОТВОРЕНИЕ МИРА - поднято на 20% */
+.side-curtain.right .production-title:nth-child(5) { top: 30%; left: 190px; } /* СОТВОРЕНИЕ МИРА - поднято еще на 5% */
 
 
 /* ====== МОБИЛЬНАЯ ГАЛЕРЕЯ ====== */
@@ -425,7 +425,7 @@ h1, h2 {
     margin-right: 5px;
     flex-shrink: 0;
     object-fit: cover;
-    border: 2px solid var(--theatre-gold);
+    border: none; /* Убираем желтую рамку */
   }
 }
 
@@ -436,7 +436,7 @@ h1, h2 {
   left: 50%;
   transform: translate(-50%, -50%);
   background: linear-gradient(135deg, #FFFEF0 0%, #FFF8DC 100%);
-  border: 8px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 0 60px rgba(184,134,11,0.15);
   padding: 40px 50px;
   z-index: 1600;
@@ -694,7 +694,7 @@ h1, h2 {
   left: 15px;
   right: 15px;
   bottom: 15px;
-  border: 4px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   box-shadow: 
     0 0 0 1px var(--theatre-dark-gold),
     inset 0 0 0 1px var(--theatre-dark-gold);
@@ -727,7 +727,7 @@ h1, h2 {
 
 .ticket-header { 
   text-align: center; 
-  border-bottom: 3px double var(--theatre-gold); 
+  border-bottom: none; /* Убираем желтую рамку */ 
   padding: 30px 20px 25px;
   margin: 0 20px 35px;
   position: relative;
@@ -773,7 +773,7 @@ h1, h2 {
 }
 
 .question-content {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.8;
   color: var(--theatre-dark);
   margin-bottom: 25px;
@@ -868,7 +868,7 @@ h1, h2 {
 
 .answer-option span:not(.answer-label) {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 1.5;
   color: var(--theatre-dark);
 }
@@ -910,8 +910,8 @@ h1, h2 {
   padding: 25px 20px 40px;
   background: linear-gradient(to bottom, rgba(139,0,0,0.03) 0%, rgba(139,0,0,0.08) 100%);
   border-radius: 0;
-  border-top: 2px dashed var(--theatre-gold);
-  border-bottom: 2px dashed var(--theatre-gold);
+  border-top: none; /* Убираем желтые пунктирные линии */
+  border-bottom: none; /* Убираем желтые пунктирные линии */
   position: relative;
 }
 
@@ -1191,7 +1191,7 @@ h1, h2 {
   margin-bottom: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border-bottom: 2px solid var(--theatre-gold);
+  border-bottom: none; /* Убираем желтую нижнюю границу */
   padding-bottom: 8px;
 }
 
@@ -1314,6 +1314,82 @@ h1, h2 {
     0 0 20px rgba(255,215,0,0.5),
     2px 2px 4px rgba(0,0,0,0.5);
   letter-spacing: 0.1em;
+  padding: 20px 20px;
+  border: 3px solid #FFD700; /* Возвращаем обводку вокруг слова */
+  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(220, 20, 60, 0.2));
+  box-shadow: 
+    0 0 30px rgba(255, 215, 0, 0.6),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  position: relative;
+  display: inline-block;
+  /* Привязываем к кисточкам: 120px (занавес) + 60px (кисточки) + 2px (отступ) */
+  margin-top: 182px; /* 182px от верха экрана */
+}
+
+/* Стили для SVG салютов */
+.gallery-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.star-left,
+.star-right {
+  width: 40px;
+  height: 40px;
+  animation: bounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+}
+
+.star-left {
+  animation-delay: 0.5s;
+}
+
+.star-right {
+  animation-delay: 1s;
+}
+
+/* === ТЕАТРАЛЬНЫЕ МАСКИ ПО БОКАМ === */
+.theatre-masks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mask-left,
+.mask-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 150px;
+  height: 120px;
+  animation: maskFloat 6s ease-in-out infinite;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+}
+
+.mask-left {
+  left: 50px;
+  animation-delay: 0s;
+}
+
+.mask-right {
+  right: 50px;
+  animation-delay: 3s;
+}
+
+@keyframes maskFloat {
+  0%, 100% {
+    transform: translateY(-50%) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-55%) rotate(5deg);
+  }
 }
 
 .gallery-subtitle { 
@@ -1356,7 +1432,7 @@ h1, h2 {
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 3px solid var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   transition: all 0.3s ease;
   z-index: 2;
   opacity: 0;
@@ -1413,7 +1489,7 @@ h1, h2 {
   font-weight: 700;
   font-family: 'Playfair Display', serif;
   font-size: 14px;
-  border: 2px solid var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   box-shadow: 0 3px 10px rgba(0,0,0,0.5);
   z-index: 3;
   letter-spacing: 0.05em;
@@ -1443,7 +1519,7 @@ h1, h2 {
 
 .hint-content { 
   background: linear-gradient(135deg, #FFFEF0 0%, #FFF8DC 100%);
-  border: 6px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   border-radius: 0;
   padding: 50px 45px;
   max-width: 550px;
@@ -1505,7 +1581,7 @@ h1, h2 {
   height: 40px;
   background: linear-gradient(135deg, var(--theatre-red) 0%, var(--theatre-burgundy) 100%);
   color: var(--theatre-gold);
-  border: 2px solid var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   border-radius: 0;
   cursor: pointer;
   font-size: 22px;
@@ -1576,7 +1652,7 @@ h1, h2 {
 .revealed-photo { 
   max-width: 100%;
   max-height: 70vh;
-  border: 10px solid var(--theatre-gold);
+  border: none; /* Убираем желтую рамку во всю ширину */
   border-radius: 0;
   box-shadow: 
     0 30px 80px rgba(0,0,0,0.8),
@@ -1647,7 +1723,7 @@ h1, h2 {
   text-align: center;
   padding: 60px 40px;
   background: linear-gradient(135deg, rgba(255,254,240,0.95) 0%, rgba(255,248,220,0.95) 100%);
-  border: 6px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   box-shadow: 
     0 20px 60px rgba(0,0,0,0.4),
     inset 0 0 80px rgba(184,134,11,0.1);
@@ -1827,7 +1903,7 @@ h1, h2 {
   padding: 18px 50px;
   background: linear-gradient(135deg, var(--theatre-red) 0%, var(--theatre-burgundy) 100%);
   color: var(--theatre-gold);
-  border: 4px solid var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   border-radius: 0;
   font-family: 'Playfair Display', serif;
   font-weight: 700;
@@ -1879,7 +1955,7 @@ h1, h2 {
   margin: 50px auto;
   padding: 40px;
   background: linear-gradient(135deg, rgba(255,254,240,0.1) 0%, rgba(255,248,220,0.1) 100%);
-  border: 4px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   border-radius: 0;
   box-shadow: 
     0 10px 40px rgba(0,0,0,0.5),
@@ -1917,7 +1993,7 @@ h1, h2 {
   padding: 18px 25px;
   margin: 15px 0;
   background: rgba(44,24,16,0.3);
-  border-left: 4px solid var(--theatre-gold);
+  border-left: none; /* Убираем желтую рамку */
   transition: all 0.3s ease;
 }
 
@@ -1957,7 +2033,7 @@ h1, h2 {
 
 .notification-content {
   background: linear-gradient(135deg, #FFFEF0 0%, #FFF8DC 100%);
-  border: 6px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   padding: 45px 50px;
   max-width: 500px;
   position: relative;
@@ -2089,7 +2165,7 @@ h1, h2 {
 
 .confirm-content {
   background: linear-gradient(135deg, #FFFEF0 0%, #FFF8DC 100%);
-  border: 6px double var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   padding: 45px 50px;
   max-width: 500px;
   position: relative;
@@ -2210,6 +2286,25 @@ h1, h2 {
   z-index: 1;
 }
 
+/* Исправляем позиционирование слайдера при полноэкранном режиме */
+.gallery-slider.slider-view-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.95) !important;
+  z-index: 10001 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
 /* Кнопка закрытия слайдера */
 .slider-close-btn {
   position: absolute;
@@ -2239,6 +2334,93 @@ h1, h2 {
   box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
 
+/* === УЛУЧШЕННЫЙ СЛАЙДЕР ДЛЯ ПРИЗА === */
+
+.slider-view-fullscreen .slider-photo-container {
+  position: relative !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 40px !important;
+  box-sizing: border-box !important;
+}
+
+.slider-view-fullscreen .slider-photo {
+  max-width: 90% !important;
+  max-height: 90% !important;
+  object-fit: contain !important;
+  border-radius: 20px !important;
+  box-shadow: 0 0 80px rgba(255, 215, 0, 0.7) !important;
+  border: none !important; /* Убираем желтую рамку */
+}
+
+.slider-view-fullscreen .slider-nav {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #FFD700 !important;
+  border: none !important; /* Убираем желтую рамку */
+  border-radius: 50% !important;
+  width: 80px !important;
+  height: 80px !important;
+  font-size: 32px !important;
+  cursor: pointer !important;
+  z-index: 10002 !important;
+  transition: all 0.3s ease !important;
+}
+
+.slider-view-fullscreen .slider-nav:hover {
+  background: rgba(255, 215, 0, 0.2) !important;
+  transform: translateY(-50%) scale(1.1) !important;
+}
+
+.slider-view-fullscreen .slider-nav.prev {
+  left: 20px !important;
+}
+
+.slider-view-fullscreen .slider-nav.next {
+  right: 20px !important;
+}
+
+.slider-view-fullscreen .slider-counter {
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: #FFD700 !important;
+  padding: 10px 20px !important;
+  border-radius: 25px !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  border: 2px solid #FFD700 !important;
+}
+
+.slider-view-fullscreen .slider-close-btn {
+  position: absolute !important;
+  top: 30px !important;
+  right: 30px !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #FFD700 !important;
+  border: none !important; /* Убираем желтую рамку */
+  border-radius: 50% !important;
+  width: 70px !important;
+  height: 70px !important;
+  font-size: 28px !important;
+  cursor: pointer !important;
+  z-index: 10003 !important;
+  transition: all 0.3s ease !important;
+}
+
+.slider-view-fullscreen .slider-close-btn:hover {
+  background: rgba(255, 215, 0, 0.2) !important;
+  transform: scale(1.1) !important;
+}
+
 .slider-photo-container {
   width: 100%;
   height: 70vh;
@@ -2251,7 +2433,7 @@ h1, h2 {
 .slider-photo {
   max-width: 90%;
   max-height: 90%;
-  border: 8px solid var(--theatre-gold);
+  border: none; /* Убираем желтую полосу */
   border-radius: 0;
   box-shadow: 
     0 20px 60px rgba(0,0,0,0.7),
@@ -2267,7 +2449,7 @@ h1, h2 {
   height: 70px;
   background: linear-gradient(135deg, var(--theatre-red) 0%, var(--theatre-burgundy) 100%);
   color: var(--theatre-gold);
-  border: 4px solid var(--theatre-gold);
+  border: none; /* Убираем желтую рамку */
   border-radius: 50%;
   font-size: 28px;
   cursor: pointer;

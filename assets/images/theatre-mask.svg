@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80">
+  <defs>
+    <linearGradient id="maskGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B0000;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#DC143C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B0000;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="featherGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+    <filter id="maskGlow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Основная маска -->
+  <path d="M20 40 Q30 20 50 25 Q70 20 80 40 Q75 60 50 65 Q25 60 20 40 Z" 
+        fill="url(#maskGradient)" 
+        stroke="#654321" 
+        stroke-width="2"
+        filter="url(#maskGlow)"/>
+  
+  <!-- Глаза -->
+  <ellipse cx="35" cy="35" rx="8" ry="12" fill="#000" opacity="0.8"/>
+  <ellipse cx="65" cy="35" rx="8" ry="12" fill="#000" opacity="0.8"/>
+  
+  <!-- Блеск в глазах -->
+  <ellipse cx="38" cy="32" rx="2" ry="3" fill="#FFD700"/>
+  <ellipse cx="68" cy="32" rx="2" ry="3" fill="#FFD700"/>
+  
+  <!-- Нос -->
+  <path d="M50 45 Q45 50 50 55 Q55 50 50 45" fill="#8B0000" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Рот -->
+  <path d="M40 55 Q50 60 60 55" stroke="#000" stroke-width="2" fill="none"/>
+  
+  <!-- Перья -->
+  <path d="M15 30 Q10 15 20 10 Q25 20 15 30" fill="url(#featherGradient)" stroke="#FFA500" stroke-width="1"/>
+  <path d="M85 30 Q90 15 80 10 Q75 20 85 30" fill="url(#featherGradient)" stroke="#FFA500" stroke-width="1"/>
+  <path d="M10 35 Q5 25 15 20 Q20 30 10 35" fill="url(#featherGradient)" stroke="#FFA500" stroke-width="1"/>
+  <path d="M90 35 Q95 25 85 20 Q80 30 90 35" fill="url(#featherGradient)" stroke="#FFA500" stroke-width="1"/>
+  
+  <!-- Украшения -->
+  <circle cx="30" cy="25" r="2" fill="#FFD700"/>
+  <circle cx="70" cy="25" r="2" fill="#FFD700"/>
+  <circle cx="25" cy="45" r="1.5" fill="#FFD700"/>
+  <circle cx="75" cy="45" r="1.5" fill="#FFD700"/>
+</svg>
