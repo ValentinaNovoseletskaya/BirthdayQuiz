@@ -1,7 +1,33 @@
 /* Фото-вопрос: адаптивный размер */
 .photo-question { text-align: center; margin-bottom: 20px; }
-.photo-question .photo-zoom { max-width: 100%; height: auto; max-height: 320px; border: 4px solid var(--theatre-dark-gold); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.photo-question .photo-zoom { 
+  max-width: 100%; 
+  height: auto; 
+  max-height: 320px; 
+  border: 4px solid var(--theatre-dark-gold); 
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  object-fit: contain;
+  object-position: center;
+}
 .photo-question .photo-caption { margin-top: 10px; font-style: italic; }
+
+/* Стили для вертикальных изображений в вопросах */
+.photo-question .photo-zoom.portrait {
+  max-height: 400px; /* Увеличиваем высоту для вертикальных фото */
+  max-width: 280px;  /* Ограничиваем ширину */
+}
+
+/* Стили для горизонтальных изображений в вопросах */
+.photo-question .photo-zoom.landscape {
+  max-height: 320px;
+  max-width: 100%;
+}
+
+/* Стили для квадратных изображений в вопросах */
+.photo-question .photo-zoom.square {
+  max-height: 320px;
+  max-width: 320px;
+}
 :root {
   --theatre-red: #8B0000;
   --theatre-burgundy: #800020;
@@ -425,7 +451,26 @@ h1, h2 {
     margin-right: 5px;
     flex-shrink: 0;
     object-fit: cover;
+    object-position: center;
     border: none; /* Убираем желтую рамку */
+  }
+  
+  /* Стили для вертикальных изображений в мобильной галерее */
+  .mobile-gallery-preview .gallery-photo.portrait {
+    width: 45px;
+    height: 60px;
+  }
+  
+  /* Стили для горизонтальных изображений в мобильной галерее */
+  .mobile-gallery-preview .gallery-photo.landscape {
+    width: 60px;
+    height: 45px;
+  }
+  
+  /* Стили для квадратных изображений в мобильной галерее */
+  .mobile-gallery-preview .gallery-photo.square {
+    width: 60px;
+    height: 60px;
   }
 }
 
@@ -1425,6 +1470,21 @@ h1, h2 {
     inset 0 0 0 1px rgba(255,215,0,0.2);
 }
 
+/* Стили для вертикальных изображений в галерее */
+.gallery-photo.portrait {
+  aspect-ratio: 3/4; /* Вертикальное соотношение сторон */
+}
+
+/* Стили для горизонтальных изображений в галерее */
+.gallery-photo.landscape {
+  aspect-ratio: 4/3; /* Горизонтальное соотношение сторон */
+}
+
+/* Стили для квадратных изображений в галерее */
+.gallery-photo.square {
+  aspect-ratio: 1/1; /* Квадратное соотношение сторон */
+}
+
 /* Декоративные уголки на фото */
 .gallery-photo::before,
 .gallery-photo::after {
@@ -2352,9 +2412,28 @@ h1, h2 {
   max-width: 90% !important;
   max-height: 90% !important;
   object-fit: contain !important;
+  object-position: center !important;
   border-radius: 20px !important;
   box-shadow: 0 0 80px rgba(255, 215, 0, 0.7) !important;
   border: none !important; /* Убираем желтую рамку */
+}
+
+/* Стили для вертикальных изображений в полноэкранном слайдере */
+.slider-view-fullscreen .slider-photo.portrait {
+  max-width: 60% !important; /* Уменьшаем ширину для вертикальных фото */
+  max-height: 90% !important;
+}
+
+/* Стили для горизонтальных изображений в полноэкранном слайдере */
+.slider-view-fullscreen .slider-photo.landscape {
+  max-width: 90% !important;
+  max-height: 90% !important;
+}
+
+/* Стили для квадратных изображений в полноэкранном слайдере */
+.slider-view-fullscreen .slider-photo.square {
+  max-width: 70% !important;
+  max-height: 70% !important;
 }
 
 .slider-view-fullscreen .slider-nav {
@@ -2439,6 +2518,25 @@ h1, h2 {
     0 20px 60px rgba(0,0,0,0.7),
     0 0 40px rgba(255,215,0,0.4);
   object-fit: contain;
+  object-position: center;
+}
+
+/* Стили для вертикальных изображений в слайдере */
+.slider-photo.portrait {
+  max-width: 60%; /* Уменьшаем ширину для вертикальных фото */
+  max-height: 90%;
+}
+
+/* Стили для горизонтальных изображений в слайдере */
+.slider-photo.landscape {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* Стили для квадратных изображений в слайдере */
+.slider-photo.square {
+  max-width: 70%;
+  max-height: 70%;
 }
 
 .slider-nav {

@@ -460,8 +460,27 @@ function showSlide(index) {
   if (index < 0) index = AppState.collectedPhotos.length - 1;
   if (index >= AppState.collectedPhotos.length) index = 0;
   currentSlideIndex = index;
-  document.getElementById('sliderPhoto').src = AppState.collectedPhotos[index] || '';
+  
+  const sliderPhoto = document.getElementById('sliderPhoto');
+  const photoPath = AppState.collectedPhotos[index] || '';
+  
+  // Убираем старые классы ориентации
+  sliderPhoto.classList.remove('landscape', 'portrait', 'square');
+  
+  // Устанавливаем новый источник изображения
+  sliderPhoto.src = photoPath;
   document.getElementById('sliderCounter').textContent = `${index + 1} / ${AppState.totalQuestions}`;
+  
+  // Определяем ориентацию нового изображения и применяем соответствующий класс
+  if (photoPath && typeof getCachedImageOrientation === 'function') {
+    getCachedImageOrientation(photoPath).then(orientationData => {
+      sliderPhoto.classList.add(orientationData.orientation);
+    }).catch(error => {
+      console.warn('Ошибка определения ориентации для слайдера:', error);
+      // Применяем класс по умолчанию
+      sliderPhoto.classList.add('landscape');
+    });
+  }
   
   // Сценарий 2: Если пользователь дошел до последнего фото (35) вручную
   if (index === AppState.collectedPhotos.length - 1) {
@@ -554,15 +573,46 @@ function showFlyingPhoto(photoPath, photoIndex) {
   const flyingPhoto = document.createElement('img');
   flyingPhoto.src = photoPath;
   flyingPhoto.className = 'photo-flying';
-  flyingPhoto.style.cssText = `
-    left: 50%;
-    top: 50%;
-    width: 300px;
-    height: 225px;
-    object-fit: cover;
-    border: 6px solid var(--theatre-gold);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(255,215,0,0.6);
-  `;
+  
+  // Определяем ориентацию изображения и применяем соответствующие стили
+  const applyFlyingPhotoStyles = (orientationData) => {
+    const isPortrait = orientationData.orientation === 'portrait';
+    const isSquare = orientationData.orientation === 'square';
+    
+    let width = 300;
+    let height = 225;
+    
+    if (isPortrait) {
+      width = 200;
+      height = 300;
+    } else if (isSquare) {
+      width = 250;
+      height = 250;
+    }
+    
+    flyingPhoto.style.cssText = `
+      left: 50%;
+      top: 50%;
+      width: ${width}px;
+      height: ${height}px;
+      object-fit: cover;
+      object-position: center;
+      border: 6px solid var(--theatre-gold);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(255,215,0,0.6);
+    `;
+  };
+  
+  // Применяем стили по умолчанию
+  applyFlyingPhotoStyles({ orientation: 'landscape' });
+  
+  // Определяем ориентацию и обновляем стили
+  if (typeof getCachedImageOrientation === 'function') {
+    getCachedImageOrientation(photoPath).then(orientationData => {
+      applyFlyingPhotoStyles(orientationData);
+    }).catch(error => {
+      console.warn('Ошибка определения ориентации для летящего фото:', error);
+    });
+  }
   
   document.body.appendChild(flyingPhoto);
   
@@ -717,6 +767,17 @@ function addPhotoToMobileGallery(photoPath) {
   photoElement.className = 'gallery-photo';
   photoElement.alt = 'Собранное фото';
   
+  // Определяем ориентацию изображения и применяем соответствующий класс
+  if (typeof getCachedImageOrientation === 'function') {
+    getCachedImageOrientation(photoPath).then(orientationData => {
+      photoElement.classList.add(orientationData.orientation);
+    }).catch(error => {
+      console.warn('Ошибка определения ориентации для мобильной галереи:', error);
+      // Применяем класс по умолчанию
+      photoElement.classList.add('landscape');
+    });
+  }
+  
   mobileGallery.appendChild(photoElement);
   
   // Прокручиваем к последнему добавленному фото
@@ -729,7 +790,7 @@ function restoreMobileGallery() {
   
   mobileGallery.innerHTML = '';
   
-  // Добавляем все собранные фото
+  // Добавляем все собранные фото с определением ориентации
   AppState.collectedPhotos.forEach(photoPath => {
     addPhotoToMobileGallery(photoPath);
   });

@@ -3,6 +3,81 @@ function playSound(soundName) {
   console.log(`Звук ${soundName} отключен`);
 }
 
+// ============= ОПРЕДЕЛЕНИЕ ОРИЕНТАЦИИ ИЗОБРАЖЕНИЙ =============
+
+/**
+ * Определяет ориентацию изображения по его размерам
+ * @param {number} width - Ширина изображения
+ * @param {number} height - Высота изображения
+ * @returns {string} - 'landscape', 'portrait' или 'square'
+ */
+function getImageOrientation(width, height) {
+  if (width > height) {
+    return 'landscape';
+  } else if (height > width) {
+    return 'portrait';
+  } else {
+    return 'square';
+  }
+}
+
+/**
+ * Загружает изображение и определяет его ориентацию
+ * @param {string} imagePath - Путь к изображению
+ * @returns {Promise<Object>} - Объект с ориентацией и размерами
+ */
+function getImageOrientationAsync(imagePath) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = function() {
+      const orientation = getImageOrientation(this.naturalWidth, this.naturalHeight);
+      resolve({
+        orientation: orientation,
+        width: this.naturalWidth,
+        height: this.naturalHeight,
+        aspectRatio: this.naturalWidth / this.naturalHeight
+      });
+    };
+    img.onerror = function() {
+      reject(new Error(`Не удалось загрузить изображение: ${imagePath}`));
+    };
+    img.src = imagePath;
+  });
+}
+
+/**
+ * Кэш для хранения ориентации изображений
+ */
+const imageOrientationCache = new Map();
+
+/**
+ * Получает ориентацию изображения с кэшированием
+ * @param {string} imagePath - Путь к изображению
+ * @returns {Promise<Object>} - Объект с ориентацией и размерами
+ */
+async function getCachedImageOrientation(imagePath) {
+  if (imageOrientationCache.has(imagePath)) {
+    return imageOrientationCache.get(imagePath);
+  }
+  
+  try {
+    const orientationData = await getImageOrientationAsync(imagePath);
+    imageOrientationCache.set(imagePath, orientationData);
+    return orientationData;
+  } catch (error) {
+    console.warn(`Ошибка определения ориентации для ${imagePath}:`, error);
+    // Возвращаем дефолтные значения для горизонтального изображения
+    const defaultData = {
+      orientation: 'landscape',
+      width: 800,
+      height: 600,
+      aspectRatio: 4/3
+    };
+    imageOrientationCache.set(imagePath, defaultData);
+    return defaultData;
+  }
+}
+
 // Функция downloadAllPhotos удалена - кнопка скачивания больше не нужна
 
 function openFullscreen(photoPath) {

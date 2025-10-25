@@ -15,6 +15,18 @@ const UI = {
       questionContent.innerHTML = `<p class="question-text">${q.question}</p>`;
     } else {
       questionContent.innerHTML = `<div class="photo-question"><img src="${q.placeholderPath}" alt="Фото-вопрос" class="photo-zoom"><div class="photo-caption">${q.question}</div></div>`;
+      
+      // Определяем ориентацию изображения и применяем соответствующий класс
+      if (typeof getCachedImageOrientation === 'function') {
+        getCachedImageOrientation(q.placeholderPath).then(orientationData => {
+          const img = questionContent.querySelector('.photo-zoom');
+          if (img) {
+            img.classList.add(orientationData.orientation);
+          }
+        }).catch(error => {
+          console.warn('Ошибка определения ориентации изображения в вопросе:', error);
+        });
+      }
     }
 
     const answersContainer = document.getElementById('answersContainer');
@@ -103,15 +115,55 @@ const UI = {
   renderFinalGallery() {
     const collageView = document.getElementById('collageView');
     collageView.innerHTML = '';
-    AppState.collectedPhotos.forEach((photoPath, index) => {
+    
+    // Создаем элементы галереи асинхронно с определением ориентации
+    const createGalleryElement = async (photoPath, index) => {
       const div = document.createElement('div');
       div.className = 'gallery-photo';
+      
+      // Определяем ориентацию изображения
+      let orientationClass = 'landscape'; // По умолчанию
+      if (typeof getCachedImageOrientation === 'function') {
+        try {
+          const orientationData = await getCachedImageOrientation(photoPath);
+          orientationClass = orientationData.orientation;
+        } catch (error) {
+          console.warn('Ошибка определения ориентации для галереи:', error);
+        }
+      }
+      
+      div.classList.add(orientationClass);
       div.innerHTML = `<img src="${photoPath}" alt="Фото ${index + 1}"><span class="photo-number-badge">${index + 1}</span>`;
       div.onclick = () => openFullscreen(photoPath);
-      collageView.appendChild(div);
+      
+      return div;
+    };
+    
+    // Создаем все элементы галереи
+    Promise.all(AppState.collectedPhotos.map((photoPath, index) => 
+      createGalleryElement(photoPath, index)
+    )).then(elements => {
+      elements.forEach(element => {
+        collageView.appendChild(element);
+      });
     });
+    
+    // Обновляем слайдер
     document.getElementById('sliderPhoto').src = AppState.collectedPhotos[0] || '';
     document.getElementById('sliderCounter').textContent = `1 / ${AppState.totalQuestions}`;
+    
+    // Применяем класс ориентации к первому изображению в слайдере
+    if (AppState.collectedPhotos.length > 0 && typeof getCachedImageOrientation === 'function') {
+      getCachedImageOrientation(AppState.collectedPhotos[0]).then(orientationData => {
+        const sliderPhoto = document.getElementById('sliderPhoto');
+        if (sliderPhoto) {
+          sliderPhoto.classList.add(orientationData.orientation);
+        }
+      }).catch(error => {
+        console.warn('Ошибка определения ориентации для слайдера:', error);
+      });
+    }
+    
     this.renderStatistics();
   },
 
