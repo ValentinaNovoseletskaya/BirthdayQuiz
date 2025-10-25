@@ -490,4 +490,289 @@
   }
 }
 
+/* ============= АДАПТИВНЫЕ СТИЛИ ДЛЯ СПИСКА ПОСТАНОВОК ============= */
+
+@media (max-width: 768px) {
+  .productions-section {
+    padding: 20px;
+    margin: 30px auto;
+  }
+  
+  .productions-title {
+    font-size: 28px;
+    gap: 10px;
+  }
+  
+  .productions-subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  
+  .productions-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .production-card {
+    padding: 20px;
+  }
+  
+  .production-card-title {
+    font-size: 20px;
+  }
+  
+  .production-card-description {
+    font-size: 15px;
+  }
+  
+  /* Модальное окно постановки */
+  .production-modal-content {
+    width: 95%;
+    max-height: 95%;
+  }
+  
+  .production-modal-header {
+    padding: 30px 20px 15px;
+  }
+  
+  .production-modal-title {
+    font-size: 24px;
+  }
+  
+  .production-modal-type {
+    font-size: 16px;
+  }
+  
+  .production-modal-body {
+    padding: 20px;
+    max-height: 70vh;
+  }
+  
+  .production-info-section h3 {
+    font-size: 18px;
+  }
+  
+  .production-info-section p {
+    font-size: 15px;
+  }
+  
+  .production-highlights li {
+    font-size: 15px;
+  }
+  
+  .production-trivia p {
+    font-size: 15px;
+  }
+  
+  /* Модальное окно достижений */
+  .achievements-modal-content {
+    padding: 30px 20px;
+    max-width: 95%;
+    width: 95%;
+  }
+  
+  .achievements-modal-title {
+    font-size: 1.5rem;
+  }
+  
+  .achievements-stats-trophy-icon {
+    width: 24px;
+    height: 28px;
+  }
+  
+  .achievements-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .achievement-stat-item {
+    padding: 8px;
+  }
+  
+  .achievement-stat-label {
+    font-size: 0.9rem;
+  }
+  
+  /* Просмотрщик фотографий */
+  .photo-viewer-image {
+    max-width: 95vw;
+    max-height: 80vh;
+  }
+  
+  .photo-viewer-close {
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+  }
+  
+  .photo-viewer-controls {
+    bottom: 20px;
+    padding: 12px 20px;
+    gap: 15px;
+  }
+  
+  .photo-viewer-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+  
+  .photo-viewer-counter {
+    font-size: 16px;
+    min-width: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productions-section {
+    padding: 15px;
+    margin: 20px auto;
+  }
+  
+  .productions-title {
+    font-size: 24px;
+    gap: 8px;
+  }
+  
+  .productions-subtitle {
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+  
+  .productions-grid {
+    gap: 15px;
+  }
+  
+  .production-card {
+    padding: 15px;
+  }
+  
+  .production-card-title {
+    font-size: 18px;
+  }
+  
+  .production-card-type {
+    font-size: 14px;
+  }
+  
+  .production-card-composer,
+  .production-card-premiere {
+    font-size: 13px;
+  }
+  
+  .production-card-description {
+    font-size: 14px;
+  }
+  
+  .production-card-click-hint {
+    font-size: 11px;
+  }
+  
+  /* Модальное окно постановки */
+  .production-modal-content {
+    width: 98%;
+    max-height: 98%;
+  }
+  
+  .production-modal-header {
+    padding: 25px 15px 10px;
+  }
+  
+  .production-modal-title {
+    font-size: 20px;
+  }
+  
+  .production-modal-type {
+    font-size: 14px;
+  }
+  
+  .production-modal-body {
+    padding: 15px;
+    max-height: 75vh;
+  }
+  
+  .production-info-section h3 {
+    font-size: 16px;
+  }
+  
+  .production-info-section p {
+    font-size: 14px;
+  }
+  
+  .production-highlights li {
+    font-size: 14px;
+  }
+  
+  .production-trivia p {
+    font-size: 14px;
+  }
+  
+  /* Модальное окно достижений */
+  .achievements-modal-content {
+    padding: 20px 15px;
+    max-width: 95%;
+    width: 95%;
+  }
+  
+  .achievements-modal-title {
+    font-size: 1.2rem;
+  }
+  
+  .achievements-stats-trophy-icon {
+    width: 20px;
+    height: 24px;
+  }
+  
+  .achievements-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .achievement-stat-item {
+    padding: 6px;
+  }
+  
+  .achievement-stat-label {
+    font-size: 0.85rem;
+  }
+  
+  .achievement-stat-value {
+    font-size: 0.9rem;
+  }
+  
+  /* Просмотрщик фотографий */
+  .photo-viewer-image {
+    max-width: 98vw;
+    max-height: 75vh;
+    border-width: 2px;
+  }
+  
+  .photo-viewer-close {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+  
+  .photo-viewer-controls {
+    bottom: 15px;
+    padding: 10px 15px;
+    gap: 12px;
+  }
+  
+  .photo-viewer-nav {
+    width: 35px;
+    height: 35px;
+    font-size: 22px;
+  }
+  
+  .photo-viewer-counter {
+    font-size: 14px;
+    min-width: 60px;
+  }
+}
+
 

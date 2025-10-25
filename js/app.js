@@ -4,6 +4,7 @@ let usedHints = [];
 let hintTimers = {};
 let hintCountdownIntervals = {};
 let currentSlideIndex = 0;
+let sortedPhotos = []; // Отсортированные фотографии для галереи и слайдера
 
 document.addEventListener('DOMContentLoaded', () => {
   AppState.init();
@@ -48,6 +49,25 @@ function startQuiz() {
   UI.showScreen('questionScreen');
   loadQuestion(0);
   UI.animateCurtain(true);
+}
+
+function restartQuiz() {
+  // Полный сброс квиза и возврат на стартовый экран
+  AppState.reset();
+  resetQuestionOrder();
+  AppState.init();
+  AppState.clearProductionProgressVisuals();
+  clearSideGalleryPhotos();
+  clearMobileGallery();
+  
+  // Возвращаемся на стартовый экран
+  UI.showScreen('welcomeScreen');
+  
+  // Показываем боковые занавесы
+  const sideCurtains = document.getElementById('sideCurtains');
+  if (sideCurtains) {
+    sideCurtains.style.display = 'flex';
+  }
 }
 
 function continueFromSaved() {
@@ -457,12 +477,15 @@ function switchViewMode(mode) {
 }
 
 function showSlide(index) {
-  if (index < 0) index = AppState.collectedPhotos.length - 1;
-  if (index >= AppState.collectedPhotos.length) index = 0;
+  // Используем отсортированные фотографии, если они доступны
+  const photos = window.sortedPhotos && window.sortedPhotos.length > 0 ? window.sortedPhotos : AppState.collectedPhotos;
+  
+  if (index < 0) index = photos.length - 1;
+  if (index >= photos.length) index = 0;
   currentSlideIndex = index;
   
   const sliderPhoto = document.getElementById('sliderPhoto');
-  const photoPath = AppState.collectedPhotos[index] || '';
+  const photoPath = photos[index] || '';
   
   // Убираем старые классы ориентации
   sliderPhoto.classList.remove('landscape', 'portrait', 'square');
@@ -483,7 +506,7 @@ function showSlide(index) {
   }
   
   // Сценарий 2: Если пользователь дошел до последнего фото (35) вручную
-  if (index === AppState.collectedPhotos.length - 1) {
+  if (index === photos.length - 1) {
     console.log('Достигнуто последнее фото (35) - закрываем слайдер');
     stopAutoSlider();
     setTimeout(() => {
@@ -506,8 +529,11 @@ function showSlide(index) {
 // Клик по фото больше не закрывает слайдер
 function prevPhoto() { showSlide(currentSlideIndex - 1); }
 function nextPhoto() { 
+  // Используем отсортированные фотографии, если они доступны
+  const photos = window.sortedPhotos && window.sortedPhotos.length > 0 ? window.sortedPhotos : AppState.collectedPhotos;
+  
   // Проверяем, не достигли ли мы последнего фото
-  if (currentSlideIndex >= AppState.collectedPhotos.length - 1) {
+  if (currentSlideIndex >= photos.length - 1) {
     console.log('Нажата стрелка вправо на последнем фото - закрываем слайдер');
     stopAutoSlider();
     setTimeout(() => {
@@ -533,12 +559,16 @@ let autoSliderCounter = 0;
 function startAutoSlider() {
   clearInterval(autoSliderTimer);
   autoSliderCounter = 0;
+  
+  // Используем отсортированные фотографии, если они доступны
+  const photos = window.sortedPhotos && window.sortedPhotos.length > 0 ? window.sortedPhotos : AppState.collectedPhotos;
+  
   autoSliderTimer = setInterval(() => {
     nextPhoto();
     autoSliderCounter++;
     
     // Автоматически закрываем слайдер после показа всех фото
-    if (autoSliderCounter >= AppState.collectedPhotos.length) {
+    if (autoSliderCounter >= photos.length) {
       stopAutoSlider();
       console.log('Автопрокрутка завершена, показываем поздравление');
       showBirthdayCongratulation();
@@ -687,7 +717,12 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') UI.closeHintModal();
+  if (e.key === 'Escape') {
+    UI.closeHintModal();
+    closeProductionModal();
+    closeAchievementsModal();
+    closeAchievementsModalTest(); // Добавляем закрытие тестового модального окна
+  }
   const sliderVisible = document.getElementById('sliderView') && document.getElementById('sliderView').style.display !== 'none';
   if (sliderVisible) {
     if (e.key === 'ArrowLeft') prevPhoto();
@@ -702,6 +737,53 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ============= ТЕСТОВАЯ ФУНКЦИЯ =============
+function testAchievements() {
+  console.log('testAchievements вызвана');
+  
+  // Проверяем, есть ли модальное окно
+  const modal = document.getElementById('achievementsModal');
+  console.log('Модальное окно найдено:', modal);
+  
+  if (modal) {
+    // Обновляем данные в модальном окне
+    updateAchievementsModalData();
+    
+    // Показываем модальное окно
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      modal.classList.add('active');
+    }, 10);
+    console.log('Модальное окно показано');
+  } else {
+    console.error('Модальное окно не найдено');
+  }
+}
+
+// Функция для обновления данных в модальном окне
+function updateAchievementsModalData() {
+  const modalStatTime = document.getElementById('modalStatTime');
+  const modalStatCorrect = document.getElementById('modalStatCorrect');
+  const modalStatHints = document.getElementById('modalStatHints');
+  const modalStatFavorite = document.getElementById('modalStatFavorite');
+  
+  if (modalStatTime) modalStatTime.textContent = AppState.getElapsedTime();
+  if (modalStatCorrect) modalStatCorrect.textContent = `${AppState.statistics.correctFirstTry}/${AppState.totalQuestions}`;
+  if (modalStatHints) modalStatHints.textContent = AppState.statistics.totalHintsUsed;
+  if (modalStatFavorite) modalStatFavorite.textContent = AppState.getFavoriteProduction();
+}
+
+// Функция для закрытия модального окна достижений
+function closeAchievementsModalTest() {
+  const modal = document.getElementById('achievementsModal');
+  if (modal) {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 400);
+  }
+}
+
 // ============= ВОССТАНОВЛЕНИЕ ФОТО В БОКОВЫХ ГАЛЕРЕЯХ =============
 function restoreSideGalleryPhotos() {
   const leftGallery = document.getElementById('sideGalleryLeft');
@@ -710,7 +792,11 @@ function restoreSideGalleryPhotos() {
   const leftSlots = leftGallery.querySelectorAll('.side-photo-slot');
   const rightSlots = rightGallery.querySelectorAll('.side-photo-slot');
   let li = 0, ri = 0;
-  AppState.collectedPhotos.forEach((photoPath, index) => {
+  
+  // Используем отсортированные фотографии, если они доступны
+  const photos = window.sortedPhotos && window.sortedPhotos.length > 0 ? window.sortedPhotos : AppState.collectedPhotos;
+  
+  photos.forEach((photoPath, index) => {
     const isLeft = index % 2 === 0;
     if (isLeft && leftSlots[li]) {
       const slot = leftSlots[li++];
@@ -744,7 +830,55 @@ function clearSideGalleryPhotos() {
   });
 }
 
-// ============= МОБИЛЬНАЯ ГАЛЕРЕЯ =============
+// ============= МОДАЛЬНОЕ ОКНО ПОСТАНОВКИ =============
+
+/**
+ * Показать модальное окно с информацией о постановке
+ * @param {string} productionName - Название постановки
+ */
+function showProductionModal(productionName) {
+  if (typeof UI !== 'undefined' && UI.showProductionModal) {
+    UI.showProductionModal(productionName);
+  }
+}
+
+/**
+ * Скрыть модальное окно с информацией о постановке
+ */
+function closeProductionModal() {
+  if (typeof UI !== 'undefined' && UI.hideProductionModal) {
+    UI.hideProductionModal();
+  }
+}
+
+/**
+ * Показать модальное окно достижений
+ */
+function showAchievementsModal() {
+  console.log('showAchievementsModal вызвана');
+  
+  // Простая проверка - покажем alert
+  alert('Кнопка "Достижения" работает!');
+  
+  console.log('UI объект:', typeof UI);
+  console.log('UI.showAchievementsModal метод:', typeof UI?.showAchievementsModal);
+  
+  if (typeof UI !== 'undefined' && UI.showAchievementsModal) {
+    console.log('Вызываем UI.showAchievementsModal');
+    UI.showAchievementsModal();
+  } else {
+    console.error('UI или метод showAchievementsModal недоступны');
+  }
+}
+
+/**
+ * Скрыть модальное окно достижений
+ */
+function closeAchievementsModal() {
+  if (typeof UI !== 'undefined' && UI.hideAchievementsModal) {
+    UI.hideAchievementsModal();
+  }
+}
 
 function initMobileGallery() {
   const mobileGallery = document.getElementById('mobileGalleryPreview');
@@ -790,8 +924,11 @@ function restoreMobileGallery() {
   
   mobileGallery.innerHTML = '';
   
+  // Используем отсортированные фотографии, если они доступны
+  const photos = window.sortedPhotos && window.sortedPhotos.length > 0 ? window.sortedPhotos : AppState.collectedPhotos;
+  
   // Добавляем все собранные фото с определением ориентации
-  AppState.collectedPhotos.forEach(photoPath => {
+  photos.forEach(photoPath => {
     addPhotoToMobileGallery(photoPath);
   });
 }
@@ -813,6 +950,109 @@ window.addEventListener('resize', () => {
     } else {
       mobileGallery.style.display = 'none';
     }
+  }
+});
+
+// ============= ПРОСМОТРЩИК ФОТОГРАФИЙ =============
+let currentPhotoViewerIndex = 0;
+let photoViewerPhotos = [];
+
+function openPhotoViewer(photoPath) {
+  const modal = document.getElementById('photoViewerModal');
+  const image = document.getElementById('photoViewerImage');
+  const counter = document.getElementById('photoViewerCounter');
+  
+  if (!modal || !image) return;
+  
+  // Используем отсортированные фотографии
+  photoViewerPhotos = window.sortedPhotos && window.sortedPhotos.length > 0 
+    ? window.sortedPhotos 
+    : AppState.collectedPhotos;
+  
+  // Находим индекс текущей фотографии
+  currentPhotoViewerIndex = photoViewerPhotos.findIndex(p => p === photoPath);
+  if (currentPhotoViewerIndex === -1) currentPhotoViewerIndex = 0;
+  
+  // Устанавливаем фото
+  image.src = photoPath;
+  if (counter) {
+    counter.textContent = `${currentPhotoViewerIndex + 1} / ${photoViewerPhotos.length}`;
+  }
+  
+  // Показываем модальное окно
+  modal.style.display = 'flex';
+  setTimeout(() => {
+    modal.classList.add('active');
+  }, 10);
+}
+
+function closePhotoViewer() {
+  const modal = document.getElementById('photoViewerModal');
+  if (modal) {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
+}
+
+function nextPhotoViewer() {
+  if (photoViewerPhotos.length === 0) return;
+  
+  currentPhotoViewerIndex = (currentPhotoViewerIndex + 1) % photoViewerPhotos.length;
+  updatePhotoViewer();
+}
+
+function prevPhotoViewer() {
+  if (photoViewerPhotos.length === 0) return;
+  
+  currentPhotoViewerIndex = (currentPhotoViewerIndex - 1 + photoViewerPhotos.length) % photoViewerPhotos.length;
+  updatePhotoViewer();
+}
+
+function updatePhotoViewer() {
+  const image = document.getElementById('photoViewerImage');
+  const counter = document.getElementById('photoViewerCounter');
+  
+  if (!image || photoViewerPhotos.length === 0) return;
+  
+  // Анимация смены фото
+  image.style.opacity = '0';
+  setTimeout(() => {
+    image.src = photoViewerPhotos[currentPhotoViewerIndex];
+    if (counter) {
+      counter.textContent = `${currentPhotoViewerIndex + 1} / ${photoViewerPhotos.length}`;
+    }
+    image.style.transition = 'opacity 0.3s ease';
+    image.style.opacity = '1';
+  }, 150);
+}
+
+// Закрытие по Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const photoViewer = document.getElementById('photoViewerModal');
+    if (photoViewer && photoViewer.classList.contains('active')) {
+      closePhotoViewer();
+    }
+  }
+  
+  // Навигация стрелками
+  const photoViewer = document.getElementById('photoViewerModal');
+  if (photoViewer && photoViewer.classList.contains('active')) {
+    if (e.key === 'ArrowLeft') {
+      prevPhotoViewer();
+    } else if (e.key === 'ArrowRight') {
+      nextPhotoViewer();
+    }
+  }
+});
+
+// Закрытие по клику на фон
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('photoViewerModal');
+  if (modal && e.target === modal) {
+    closePhotoViewer();
   }
 });
 

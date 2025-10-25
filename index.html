@@ -198,8 +198,9 @@
         </h1>
       </div>
       <div class="view-mode-toggle">
-        <button class="mode-button active" id="collageMode" onclick="switchViewMode('collage')">🖼️ Коллаж</button>
+        <button class="mode-button active" id="collageMode" onclick="switchViewMode('collage')">🖼️ Галерея</button>
         <button class="mode-button" id="sliderMode" onclick="switchViewMode('slider')">📸 Слайдер</button>
+        <button class="mode-button achievements-btn" onclick="testAchievements()">🏆 Достижения</button>
       </div>
       <div id="collageView" class="gallery-collage"></div>
       <div id="sliderView" class="gallery-slider" style="display: none;">
@@ -226,14 +227,22 @@
         </div>
       </div>
       
-      <div class="statistics-panel" id="statisticsPanel">
-        <h2 class="statistics-title">🏆 Твои достижения</h2>
-        <div class="stat-item"><span class="stat-label">⏱️ Время прохождения:</span><span class="stat-value" id="statTime">--</span></div>
-        <div class="stat-item"><span class="stat-label">✅ Правильных с 1 попытки:</span><span class="stat-value" id="statCorrect">--/35</span></div>
-        <div class="stat-item"><span class="stat-label">💡 Использовано подсказок:</span><span class="stat-value" id="statHints">--</span></div>
-        <div class="stat-item"><span class="stat-label">🎭 Любимая постановка:</span><span class="stat-value" id="statFavorite">--</span></div>
+      <!-- Таблица достижений теперь будет в модальном окне -->
+      
+      <!-- Список постановок -->
+      <div class="productions-section" id="productionsSection" style="display: none;">
+        <h2 class="productions-title">
+          <img src="assets/images/theatre-star.svg" alt="Звезда" class="star-left">
+          Постановки из квиза
+          <img src="assets/images/theatre-star.svg" alt="Звезда" class="star-right">
+        </h2>
+        <p class="productions-subtitle">Кликните на название постановки, чтобы узнать больше</p>
+        <div class="productions-grid" id="productionsGrid">
+          <!-- Постановки будут добавлены динамически -->
+        </div>
       </div>
-      <button class="start-button" onclick="startQuiz()" style="margin: 40px auto; display: block;">🔄 Начать заново</button>
+      
+      <button class="start-button" onclick="restartQuiz()" style="margin: 40px auto; display: block;">🔄 Начать заново</button>
     </section>
   </div>
 
@@ -292,11 +301,82 @@
     </div>
   </div>
 
+  <!-- Модальное окно с информацией о постановке -->
+  <div class="production-modal" id="productionModal" style="display: none;">
+    <div class="production-modal-content">
+      <button class="production-modal-close" onclick="closeProductionModal()">✕</button>
+      <div class="production-modal-header">
+        <h2 class="production-modal-title" id="productionModalTitle"></h2>
+        <div class="production-modal-type" id="productionModalType"></div>
+      </div>
+      <div class="production-modal-body" id="productionModalBody">
+        <div class="production-modal-composer" id="productionModalComposer"></div>
+        <div class="production-modal-choreographer" id="productionModalChoreographer"></div>
+        <div class="production-modal-libretto" id="productionModalLibretto"></div>
+        <div class="production-modal-premiere" id="productionModalPremiere"></div>
+        <div class="production-modal-original-premiere" id="productionModalOriginalPremiere"></div>
+        <div class="production-modal-description" id="productionModalDescription"></div>
+        <div class="production-modal-music" id="productionModalMusic"></div>
+        <div class="production-modal-highlights" id="productionModalHighlights">
+          <h3>Особенности постановки:</h3>
+          <ul></ul>
+        </div>
+        <div class="production-modal-trivia" id="productionModalTrivia"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно достижений -->
+  <div class="achievements-modal" id="achievementsModal" style="display: none;">
+    <div class="achievements-modal-content">
+      <button class="achievements-modal-close" onclick="closeAchievementsModalTest()">✕</button>
+      <img src="assets/images/theatre-trophy.svg" alt="Трофей" class="achievements-trophy-icon">
+      <h2 class="achievements-modal-title">
+        <img src="assets/images/theatre-trophy.svg" alt="Трофей" class="achievements-stats-trophy-icon">
+        Твои достижения
+      </h2>
+      <div class="achievements-stats-grid">
+        <div class="achievement-stat-item">
+          <span class="achievement-stat-icon">⏱️</span>
+          <span class="achievement-stat-label">Время:</span>
+          <span class="achievement-stat-value" id="modalStatTime">--</span>
+        </div>
+        <div class="achievement-stat-item">
+          <span class="achievement-stat-icon">✅</span>
+          <span class="achievement-stat-label">С первой попытки:</span>
+          <span class="achievement-stat-value" id="modalStatCorrect">--/35</span>
+        </div>
+        <div class="achievement-stat-item">
+          <span class="achievement-stat-icon">💡</span>
+          <span class="achievement-stat-label">Подсказок:</span>
+          <span class="achievement-stat-value" id="modalStatHints">--</span>
+        </div>
+        <div class="achievement-stat-item">
+          <span class="achievement-stat-icon">🎭</span>
+          <span class="achievement-stat-label">Любимая постановка:</span>
+          <span class="achievement-stat-value" id="modalStatFavorite">--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для просмотра фотографии -->
+  <div class="photo-viewer-modal" id="photoViewerModal" style="display: none;">
+    <button class="photo-viewer-close" onclick="closePhotoViewer()">✕</button>
+    <img id="photoViewerImage" class="photo-viewer-image" src="" alt="Увеличенное фото">
+    <div class="photo-viewer-controls">
+      <button class="photo-viewer-nav prev" onclick="prevPhotoViewer()">‹</button>
+      <span class="photo-viewer-counter" id="photoViewerCounter">1 / 35</span>
+      <button class="photo-viewer-nav next" onclick="nextPhotoViewer()">›</button>
+    </div>
+  </div>
+
   <!-- Контейнер для праздничных частиц -->
   <div class="celebration-particles" id="celebrationParticles"></div>
 
   <script src="libs/jszip.min.js"></script>
   <script src="js/questions.js"></script>
+  <script src="js/productions.js"></script>
   <script src="js/state.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/utils.js"></script>
